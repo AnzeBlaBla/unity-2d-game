@@ -52,40 +52,5 @@ class InputController : Singleton<InputController>
         }
     }
 
-    public void EnableAllInput()
-    {
-        inputActions.Player.Move.Enable();
-        inputActions.Player.MoveLeft.Enable();
-        inputActions.Player.MoveRight.Enable();
-
-        inputActions.Player.Crouch.Enable();
-        inputActions.Player.Jump.Enable();
-        inputActions.Player.Look.Enable();
-
-        inputActions.UI._1.Enable();
-        inputActions.UI._2.Enable();
-        inputActions.UI._3.Enable();
-
-        //inputActions.Touch.PrimaryTouch.Enable();
-        //inputActions.Touch.PrimaryTouchPosition.Enable();
-    }
-    public void DisableAllInput()
-    {
-        inputActions.Player.Move.Disable();
-        inputActions.Player.MoveLeft.Disable();
-        inputActions.Player.MoveRight.Disable();
-
-        inputActions.Player.Crouch.Disable();
-        inputActions.Player.Jump.Disable();
-        inputActions.Player.Look.Disable();
-
-        inputActions.UI._1.Disable();
-        inputActions.UI._2.Disable();
-        inputActions.UI._3.Disable();
-
-        //inputActions.Touch.PrimaryTouch.Disable();
-        //inputActions.Touch.PrimaryTouchPosition.Disable();
-    }
-
 
 }
