@@ -223,7 +223,25 @@ MonoBehaviour:
   positionPointerPrefab: {fileID: 6717953032997315306, guid: 2df6ab94bd9f89241b167c15c8f1c152, type: 3}
   moveSpeed: 5
   shootingInterval: 0.1
-  shootStartDelay: 0.2
+  shootStartDelay: 0
+  chargeUpPoints:
+  - numberOfBullets: 0
+    time: 0
+    bulletDamage: 0
+  - numberOfBullets: 3
+    time: 0.25
+    bulletDamage: 1
+  - numberOfBullets: 5
+    time: 0.5
+    bulletDamage: 2
+  - numberOfBullets: 7
+    time: 0.75
+    bulletDamage: 3
+  - numberOfBullets: 9
+    time: 1
+    bulletDamage: 4
+  chargeUpSpread: 45
+  chargeUpBulletSpeed: 25
 --- !u!1 &230537958
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+
+
 public class PlayerController : MonoBehaviour
 {
     // references
@@ -13,20 +17,44 @@ public class PlayerController : MonoBehaviour
 
 
     // movement
+    [Header("Movement")]
     public float moveSpeed = 5f;
     Vector3 desiredPosition;
 
     // Shooting
+    [Header("Shooting")]
+    public float shootingInterval = 0.5f;
+    public float shootStartDelay = 0.2f;
     bool shootingInput = false;
     bool shooting = false;
     float shootingStartTime;
     float lastShotTime;
-    public float shootingInterval = 0.5f;
-    public float shootStartDelay = 0.2f;
+
 
     // Charge up
+    [System.Serializable]
+    public struct ChargeUpPoint
+    {
+        public int numberOfBullets;
+        public float time;
+        public float bulletDamage;
+    }
+    [Header("Charge Up")]
+
+    public List<ChargeUpPoint> chargeUpPoints = new List<ChargeUpPoint>()
+    {
+        new ChargeUpPoint() { numberOfBullets = 0, time = 0f, bulletDamage = 1f },
+        new ChargeUpPoint() { numberOfBullets = 3, time = 0.5f, bulletDamage = 1f },
+        new ChargeUpPoint() { numberOfBullets = 5, time = 1f, bulletDamage = 1f },
+        new ChargeUpPoint() { numberOfBullets = 7, time = 1.5f, bulletDamage = 1f },
+        new ChargeUpPoint() { numberOfBullets = 9, time = 2f, bulletDamage = 1f }
+    };
+    public float chargeUpSpread = 45f;
+    public float chargeUpBulletSpeed = 25f;
     bool chargingUp = false;
     float chargeUpStartTime;
+    float currentChargeUp = 0f;
+
 
     void Start()
     {
@@ -68,7 +96,12 @@ public class PlayerController : MonoBehaviour
     void ChargeUpEnd()
     {
         Debug.Log("ChargeUpEnd");
-        chargingUp = false;
+        if (chargingUp)
+        {
+            chargingUp = false;
+
+            ShootChargeUp();
+        }
     }
     #endregion
 
@@ -94,8 +127,8 @@ public class PlayerController : MonoBehaviour
             if (Time.time - lastShotTime > shootingInterval)
             {
                 lastShotTime = Time.time;
-                Vector2 bulletDireciton = (MousePositionToWorldPoint() - player.transform.position).normalized;
-                SpawnBullet(bulletDireciton);
+                Vector2 bulletDirection = (MousePositionToWorldPoint() - player.transform.position).normalized;
+                SpawnBullet(bulletDirection);
             }
         }
     }
@@ -109,21 +142,70 @@ public class PlayerController : MonoBehaviour
     }
     void doChargeUp()
     {
-        //Debug.Log("ChargeUp: " + chargingUp);
+        if (chargingUp)
+        {
+            currentChargeUp = Time.time - chargeUpStartTime;
+            Debug.Log("ChargeUp: " + currentChargeUp);
+        }
+        if (currentChargeUp >= chargeUpPoints[1].time && chargingUp)
+        {
+            shootingInput = false;
+        }
+        if (currentChargeUp > chargeUpPoints[chargeUpPoints.Count - 1].time)
+        {
+            ShootChargeUp();
+            chargingUp = false;
+            currentChargeUp = 0f;
+        }
     }
-    void doMove()
+    void ShootChargeUp()
     {
-        if(shooting || chargingUp)
+        Debug.Log("ShootChargeUp");
+        // find charge up point that was last reached by the time
+        ChargeUpPoint chargeUpPoint = chargeUpPoints[0];
+        for (int i = 0; i < chargeUpPoints.Count; i++)
+        {
+            if (chargeUpPoints[i].time < currentChargeUp)
+            {
+                chargeUpPoint = chargeUpPoints[i];
+            }
+        }
+        if (chargeUpPoint.numberOfBullets == 0)
         {
             return;
         }
-        // move towards desired position
-        player.transform.position = Vector2.MoveTowards(player.transform.position, desiredPosition, Time.deltaTime * moveSpeed);
+        Vector2 middleDirection = (MousePositionToWorldPoint() - player.transform.position).normalized;
+
+        // calculate angle between spawned bullets
+        float angle = chargeUpSpread / (chargeUpPoint.numberOfBullets - 1);
+        Debug.Log("Angle: " + angle);
+        // spawn bullets
+        for (float curAngle = -chargeUpSpread / 2; curAngle <= chargeUpSpread / 2; curAngle += angle)
+        {
+            Debug.Log("SpawnBullet");
+            SpawnBullet(Quaternion.Euler(0, 0, curAngle) * middleDirection, chargeUpBulletSpeed, chargeUpPoint.bulletDamage);
+        }
+        // reset charge up
+        currentChargeUp = 0f;
+
+    }
+    void doMove()
+    {
+        if (shooting || chargingUp)
+        {
+            return;
+        }
+
 
         // if reached desired position, stop moving
         if (Vector3.Distance(player.transform.position, desiredPosition) < 0.1f)
         {
             positionPointer.SetActive(false);
+        }
+        else
+        {
+            // move towards desired position
+            player.transform.position = Vector2.MoveTowards(player.transform.position, desiredPosition, Time.deltaTime * moveSpeed);
         }
     }
     void doRotate()
