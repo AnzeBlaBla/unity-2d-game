@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public GameObject positionPointerPrefab;
     GameObject positionPointer;
 
-
+    
     // movement
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -23,12 +23,20 @@ public class PlayerController : MonoBehaviour
 
     // Shooting
     [Header("Shooting")]
+    public Transform bulletSpawnPosition;
     public float shootingInterval = 0.5f;
     public float shootStartDelay = 0.2f;
+    public float bulletDirectionRandomness = 0.1f;
     bool shootingInput = false;
     bool shooting = false;
     float shootingStartTime;
     float lastShotTime;
+
+    [Header("Constraints")]
+    public bool disableMoveWhenShooting = false;
+    public bool disableMoveWhenChargingUp = false;
+    public bool stopShootingOnChargeUp = true;
+
 
 
     // Charge up
@@ -54,7 +62,14 @@ public class PlayerController : MonoBehaviour
     bool chargingUp = false;
     float chargeUpStartTime;
     float currentChargeUp = 0f;
-
+    void Awake()
+    {
+        GetComponent<KillableEntity>().OnDeath += OnDeath;
+    }
+    void OnDeath(KillableEntity entity)
+    {
+        Debug.Log("Player died");
+    }
 
     void Start()
     {
@@ -74,13 +89,13 @@ public class PlayerController : MonoBehaviour
     #region Shooting
     void ShootStart()
     {
-        Debug.Log("ShootStart");
+        //Debug.Log("ShootStart");
         shootingStartTime = Time.time;
         shootingInput = true;
     }
     void ShootEnd()
     {
-        Debug.Log("ShootEnd");
+        //Debug.Log("ShootEnd");
         shootingInput = false;
         shooting = false;
     }
@@ -89,13 +104,13 @@ public class PlayerController : MonoBehaviour
     #region ChargeUp
     void ChargeUpStart()
     {
-        Debug.Log("ChargeUpStart");
+        //Debug.Log("ChargeUpStart");
         chargeUpStartTime = Time.time;
         chargingUp = true;
     }
     void ChargeUpEnd()
     {
-        Debug.Log("ChargeUpEnd");
+        //Debug.Log("ChargeUpEnd");
         if (chargingUp)
         {
             chargingUp = false;
@@ -108,7 +123,7 @@ public class PlayerController : MonoBehaviour
     void Move()
     {
         desiredPosition = MousePositionToWorldPoint();
-        positionPointer.transform.position = new Vector3(desiredPosition.x, desiredPosition.y, 90);
+        positionPointer.transform.position = new Vector3(desiredPosition.x, desiredPosition.y, ZPositions.positionPointer);
         positionPointer.SetActive(true);
     }
     void doShoot()
@@ -128,17 +143,19 @@ public class PlayerController : MonoBehaviour
             {
                 lastShotTime = Time.time;
                 Vector2 bulletDirection = (MousePositionToWorldPoint() - player.transform.position).normalized;
+                AudioManager.Instance.Play("Shoot");
                 SpawnBullet(bulletDirection);
             }
         }
     }
     void SpawnBullet(Vector2 direction, float speed = 10f, float damage = 1f)
     {
-        GameObject bullet = Instantiate(bulletPrefab, new Vector3(transform.position.x, transform.position.y, 10), Quaternion.identity);
+        GameObject bullet = Instantiate(bulletPrefab, new Vector3(bulletSpawnPosition.position.x, bulletSpawnPosition.position.y, ZPositions.bullet), Quaternion.identity);
         BulletController bc = bullet.GetComponent<BulletController>();
         bc.speed = speed;
         bc.damage = damage;
-        bc.direction = direction;
+        // use direction with bullet direction randomness
+        bc.direction = direction + Random.insideUnitCircle * bulletDirectionRandomness;
     }
     void doChargeUp()
     {
@@ -147,7 +164,7 @@ public class PlayerController : MonoBehaviour
             currentChargeUp = Time.time - chargeUpStartTime;
             Debug.Log("ChargeUp: " + currentChargeUp);
         }
-        if (currentChargeUp >= chargeUpPoints[1].time && chargingUp)
+        if (currentChargeUp >= chargeUpPoints[1].time && chargingUp && stopShootingOnChargeUp)
         {
             shootingInput = false;
         }
@@ -160,7 +177,7 @@ public class PlayerController : MonoBehaviour
     }
     void ShootChargeUp()
     {
-        Debug.Log("ShootChargeUp");
+
         // find charge up point that was last reached by the time
         ChargeUpPoint chargeUpPoint = chargeUpPoints[0];
         for (int i = 0; i < chargeUpPoints.Count; i++)
@@ -170,6 +187,7 @@ public class PlayerController : MonoBehaviour
                 chargeUpPoint = chargeUpPoints[i];
             }
         }
+
         if (chargeUpPoint.numberOfBullets == 0)
         {
             return;
@@ -178,20 +196,26 @@ public class PlayerController : MonoBehaviour
 
         // calculate angle between spawned bullets
         float angle = chargeUpSpread / (chargeUpPoint.numberOfBullets - 1);
-        Debug.Log("Angle: " + angle);
+
         // spawn bullets
         for (float curAngle = -chargeUpSpread / 2; curAngle <= chargeUpSpread / 2; curAngle += angle)
         {
-            Debug.Log("SpawnBullet");
             SpawnBullet(Quaternion.Euler(0, 0, curAngle) * middleDirection, chargeUpBulletSpeed, chargeUpPoint.bulletDamage);
         }
+        
+        AudioManager.Instance.Play("ShootChargeUp");
+
         // reset charge up
         currentChargeUp = 0f;
 
     }
     void doMove()
     {
-        if (shooting || chargingUp)
+        if (shooting && disableMoveWhenShooting)
+        {
+            return;
+        }
+        if (chargingUp && disableMoveWhenChargingUp)
         {
             return;
         }

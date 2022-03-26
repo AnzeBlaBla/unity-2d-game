@@ -5,6 +5,4 @@ using System.Collections.Generic;
 public class GameObjectRegistry : Singleton<GameObjectRegistry>
 {
     public GameObject player;
-    public GameObject spawnPosition;
-    public GameObject mainCamera;
 }
