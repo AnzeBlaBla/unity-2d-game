@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4124769928080304446}
   - component: {fileID: 6623528525567762349}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: -2186389842827463266}
   - component: {fileID: 4886579585980889016}
   - component: {fileID: 6148774124067363504}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -241,7 +241,6 @@ MonoBehaviour:
   speed: 50
   lifeTime: 3
   damage: 1
-  direction: {x: 0, y: 0}
 --- !u!61 &6974494166211394965
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -365,7 +364,7 @@ ParticleSystem:
   serializedVersion: 7
   lengthInSec: 0.25
   simulationSpeed: 1
-  stopAction: 0
+  stopAction: 2
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}

@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d77e4cd2f3ac4c448c77f80abd61bfa, type: 3}
+  m_Name: Spinner
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8677350196250452672, guid: 6b5afb1d00cc33f4bb433f2fcf11c644, type: 3}

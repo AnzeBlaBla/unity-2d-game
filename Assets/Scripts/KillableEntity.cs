@@ -5,11 +5,13 @@ using System;
 
 public class KillableEntity : MonoBehaviour
 {
+    [HideInInspector]
     public float health = 100f;
     public float maxHealth = 100f;
     public bool isDead { get; private set; }
 
     public bool takeBulletDamage = true;
+    public bool takeEnemyDamage = true;
 
     public Sound deathSound;
     public Sound damageSound;
@@ -18,15 +20,21 @@ public class KillableEntity : MonoBehaviour
     public ParticleSystem deathParticles;
 
     public event Action<KillableEntity> OnDeath;
+
+    void Start()
+    {
+        Revive();
+    }
     public void Damage(float damage)
     {
         health -= damage;
         if (health <= 0)
         {
+            health = 0;
             Kill();
         }
-        Debug.Log("Damage: " + damage + " Health: " + health);
-        if(damageSound != null)
+        //Debug.Log("Damage: " + damage + " Health: " + health);
+        if (damageSound != null)
         {
             AudioManager.Instance.Play(damageSound.name);
         }
@@ -55,6 +63,7 @@ public class KillableEntity : MonoBehaviour
 
         if (deathParticles != null)
         {
+            GetComponent<SpriteRenderer>().enabled = false;
             deathParticles.Play();
         }
 
@@ -62,14 +71,15 @@ public class KillableEntity : MonoBehaviour
         if (OnDeath != null)
         {
             OnDeath(this);
-        } else {
-            if(deathParticles != null)
+        }
+        else
+        {
+            // Destroy only if there is no death particles (otherwise it will be destroyed by the particle system)
+            if (deathParticles == null)
             {
-                Destroy(gameObject, deathParticles.main.duration);
-            } else {
                 Destroy(gameObject);
             }
-            
+
         }
 
     }
@@ -77,6 +87,7 @@ public class KillableEntity : MonoBehaviour
     public void Revive()
     {
         isDead = false;
+        health = maxHealth;
     }
 
     public void SetMaxHealth(float amount)
@@ -87,20 +98,6 @@ public class KillableEntity : MonoBehaviour
     public void SetHealth(float amount)
     {
         health = amount;
-    }
-
-    void OnTriggerEnter2D(Collider2D collision)
-    {
-        //Debug.Log("Trigger: " + takeBulletDamage + ", " + collision.gameObject.tag);
-        if (collision.gameObject.tag == "Bullet")
-        {
-            if (takeBulletDamage)
-            {
-                BulletController bc = collision.gameObject.GetComponent<BulletController>();
-                Damage(bc.damage);
-                bc.Hit();
-            }
-        }
     }
 
 }

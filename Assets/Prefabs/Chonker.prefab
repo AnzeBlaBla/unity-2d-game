@@ -12,11 +12,12 @@ GameObject:
   - component: {fileID: 5233478810910826801}
   - component: {fileID: 5233478810910826800}
   - component: {fileID: 2496400378709119126}
-  - component: {fileID: 8351678744892909522}
   - component: {fileID: 6655248114358975588}
-  m_Layer: 0
+  - component: {fileID: 8351678744892909522}
+  - component: {fileID: 7419398652141047523}
+  m_Layer: 6
   m_Name: Chonker
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 5233478810910826815}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.542307, y: -3.4888353, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8177471321811730583, guid: 87aaca0a643d54397ba969dab4fc8875, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f92e20d9120e1fb4093a850d22744692, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,11 +99,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3912d53d725cb56498f937e6fa70eafe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0
+  movementType: 1
+  spin: 0
+  spinSpeed: 500
   movementSpeed: 1
-  keepDistance: 2.5
-  damageInterval: 1
   damage: 50
+  damageInterval: 1
 --- !u!114 &2496400378709119126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,26 +120,11 @@ MonoBehaviour:
   health: 50
   maxHealth: 50
   takeBulletDamage: 1
+  takeEnemyDamage: 0
   deathSound: {fileID: 11400000, guid: 169e2237da8112c45a1343a4b820a621, type: 2}
   damageSound: {fileID: 0}
   damageParticles: {fileID: 0}
   deathParticles: {fileID: 0}
---- !u!58 &8351678744892909522
-CircleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5233478810910826815}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.5
 --- !u!50 &6655248114358975588
 Rigidbody2D:
   serializedVersion: 4
@@ -150,7 +137,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 50
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -159,3 +146,45 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &8351678744892909522
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5233478810910826815}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.02, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.13
+--- !u!61 &7419398652141047523
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5233478810910826815}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.12, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.32, y: 0.32}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.08, y: 0.04}
+  m_EdgeRadius: 0
