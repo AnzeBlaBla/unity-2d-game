@@ -21,7 +21,7 @@ public class KillableEntity : MonoBehaviour
 
     public event Action<KillableEntity> OnDeath;
 
-    void Start()
+    void Awake()
     {
         Revive();
     }

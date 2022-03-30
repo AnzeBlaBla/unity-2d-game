@@ -48,7 +48,8 @@ public class EnemyController : MonoBehaviour
     {
         if (spin)
         {
-            transform.Rotate(Vector3.forward, Time.deltaTime * spinSpeed);
+            //transform.Rotate(Vector3.forward, Time.deltaTime * spinSpeed);
+            rb.angularVelocity = spinSpeed;
         }
 
         if (movementType == EnemyMovementType.FollowPlayer)
