@@ -177,11 +177,7 @@ public class PlayerShooting : MonoBehaviour
 
     void SpawnBullet(Vector2 direction, float speed = 10f, float damage = 1f)
     {
-        GameObject bullet = Instantiate(bulletPrefab, new Vector3(bulletSpawnPosition.position.x, bulletSpawnPosition.position.y, ZPositions.bullet), Quaternion.identity);
-        BulletController bc = bullet.GetComponent<BulletController>();
-        bc.speed = speed;
-        bc.damage = damage;
-        bc.SetDirection(direction + Random.insideUnitCircle * bulletDirectionRandomness);
+        BulletController.SpawnBullet(bulletPrefab, bulletSpawnPosition.position, direction + Random.insideUnitCircle * bulletDirectionRandomness, speed, damage);
     }
 
     void Update()

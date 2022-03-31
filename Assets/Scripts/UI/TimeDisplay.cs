@@ -28,4 +28,9 @@ public class TimeDisplay : Singleton<TimeDisplay>
         timeAlive = Mathf.RoundToInt((Time.time - gameStartTime) * 100f) / 100f;
         text.text = string.Format(formatText, Mathf.FloorToInt(timeAlive));
     }
+
+    public void ResetTime()
+    {
+        gameStartTime = Time.time;
+    }
 }

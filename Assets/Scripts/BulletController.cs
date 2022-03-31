@@ -70,4 +70,14 @@ public class BulletController : MonoBehaviour
             }
         }
     }
+
+
+    public static void SpawnBullet(GameObject bulletPrefab, Vector3 location, Vector2 direction, float speed = 10f, float damage = 1f)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, new Vector3(location.x, location.y, ZPositions.bullet), Quaternion.identity);
+        BulletController bc = bullet.GetComponent<BulletController>();
+        bc.speed = speed;
+        bc.damage = damage;
+        bc.SetDirection(direction);
+    }
 }

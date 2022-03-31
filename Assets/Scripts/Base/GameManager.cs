@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
 
     public void Restart()
     {
+        TimeDisplay.Instance.ResetTime();
         // kill all enemies
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)

@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
 
     public float damage = 1f;
     public float damageInterval = 0.1f;
+    float lastDamageTime = 0f;
     GameObject player;
     Rigidbody2D rb;
 
@@ -33,15 +34,17 @@ public class EnemyController : MonoBehaviour
             {
                 this.enabled = false;
                 GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                GetComponent<Collider2D>().enabled = false;
+                // disable all 2d colliders
+                foreach (Collider2D c in GetComponents<Collider2D>())
+                {
+                    c.enabled = false;
+                }
             };
         }
     }
     void Start()
     {
         player = GameObjectRegistry.Instance.player;
-
-        StartCoroutine(DamageTick());
     }
 
     void Update()
@@ -74,19 +77,15 @@ public class EnemyController : MonoBehaviour
                 transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
             }
         }
-    }
 
-    IEnumerator DamageTick()
-    {
-        while (true)
+        if (Time.time - lastDamageTime > damageInterval && currentTargets.Count > 0)
         {
-            // make a copy of the current targets (because it could change while we're iterating)
             List<KillableEntity> targets = new List<KillableEntity>(currentTargets);
             foreach (KillableEntity ke in targets)
             {
                 ke.Damage(damage);
             }
-            yield return new WaitForSeconds(damageInterval);
+            lastDamageTime = Time.time;
         }
     }
     // start damaging

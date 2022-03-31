@@ -59,6 +59,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void doMove()
     {
+        rb.angularVelocity = 0; // stop rotating
+        
         if (playerShooting.shooting && disableMoveWhenShooting)
         {
             return;

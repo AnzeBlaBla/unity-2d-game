@@ -6,6 +6,9 @@ public class BobController : MonoBehaviour
 {
     public float shootInterval = 0.5f;
     public List<Transform> shootFromPoints;
+    public GameObject bulletPrefab;
+    public float bulletSpeed = 10f;
+    public float bulletDamage = 2f;
 
     float lastShootTime = 0f;
 
@@ -18,10 +21,17 @@ public class BobController : MonoBehaviour
                 lastShootTime = Time.time;
                 foreach (var point in shootFromPoints)
                 {
-                    // TODO: spawn bullet
+                    SpawnBullet(point);
                 }
             }
         }
-        
+
+    }
+
+
+    void SpawnBullet(Transform point)
+    {
+        // spawn bullet at point facing away from middle of gameobject
+        BulletController.SpawnBullet(bulletPrefab, point.position, point.position - transform.position, bulletSpeed, bulletDamage);
     }
 }
