@@ -64,8 +64,8 @@ public class EnemySpawner : Singleton<EnemySpawner>
     {
         foreach (EnemySpawnDataPoint espd in waveSpawnDataPoints)
         {
-            yield return new WaitForSeconds(espd.time);
             SpawnEnemies(espd.enemiesToSpawn);
+            yield return new WaitForSeconds(espd.time);
         }
 
         // Start spawning random enemies

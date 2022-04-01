@@ -130,23 +130,23 @@ MonoBehaviour:
   shootStartDelay: 0
   bulletDirectionRandomness: 0.1
   shooting: 0
-  stopShootingOnChargeUp: 1
+  stopShootingOnChargeUp: 0
   chargeUpPoints:
   - numberOfBullets: 0
     time: 0
     bulletDamage: 0
   - numberOfBullets: 3
-    time: 0.25
+    time: 0.5
     bulletDamage: 1
   - numberOfBullets: 5
-    time: 0.5
-    bulletDamage: 2
+    time: 1.5
+    bulletDamage: 1
   - numberOfBullets: 7
-    time: 0.75
-    bulletDamage: 3
+    time: 3
+    bulletDamage: 1
   - numberOfBullets: 9
-    time: 1
-    bulletDamage: 4
+    time: 5
+    bulletDamage: 1
   chargeUpSpread: 45
   chargeUpBulletSpeed: 25
   chargingUp: 0
@@ -164,7 +164,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionPointerPrefab: {fileID: 6717953032997315306, guid: 2df6ab94bd9f89241b167c15c8f1c152, type: 3}
-  moveSpeed: 3
+  moveSpeed: 5
+  rotateSpeed: 10
   disableMoveWhenShooting: 0
   disableMoveWhenChargingUp: 0
 --- !u!114 &7296987558305845900
@@ -191,9 +192,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc534a164b4e31d42ab22456e423d749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  maxHealth: 100
-  takeBulletDamage: 0
+  health: 5
+  maxHealth: 5
+  takeBulletDamage: 1
   takeEnemyDamage: 1
   deathSound: {fileID: 0}
   damageSound: {fileID: 11400000, guid: 0c78cbbade7ead843857ab0895c5a8f5, type: 2}

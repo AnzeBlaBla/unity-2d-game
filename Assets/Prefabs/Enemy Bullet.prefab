@@ -29,7 +29,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4645097637446360797, guid: d921d2c74c29f5d41bac2744649e81f7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.204
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4645097637446360797, guid: d921d2c74c29f5d41bac2744649e81f7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -66,6 +66,10 @@ PrefabInstance:
     - target: {fileID: 4645097637446360798, guid: d921d2c74c29f5d41bac2744649e81f7, type: 3}
       propertyPath: m_Color.g
       value: 0.2957449
+      objectReference: {fileID: 0}
+    - target: {fileID: 4645097637446360799, guid: d921d2c74c29f5d41bac2744649e81f7, type: 3}
+      propertyPath: speed
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d921d2c74c29f5d41bac2744649e81f7, type: 3}

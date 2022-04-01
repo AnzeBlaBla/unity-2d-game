@@ -242,6 +242,8 @@ MonoBehaviour:
   - {fileID: 5212665436703429350}
   - {fileID: 3200955050981443236}
   bulletPrefab: {fileID: 9118257487176628315, guid: 1299ef23cc01c3b41a87f250618bf9c4, type: 3}
+  bulletSpeed: 5
+  bulletDamage: 2
 --- !u!114 &8677350196250452687
 MonoBehaviour:
   m_ObjectHideFlags: 0
