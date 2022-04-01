@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
     public GameObject spawnPosition;
-    GameObject player;
+    public GameObject player;
+
     void Start()
     {
         player = GameObjectRegistry.Instance.player;
@@ -36,10 +37,20 @@ public class GameManager : Singleton<GameManager>
 
         player.GetComponent<PlayerShooting>().currentChargeUp = 0f;
 
-        player.GetComponent<KillableEntity>().Revive();
+
 
         player.GetComponent<PlayerMovement>().Reset();
 
         EnemySpawner.Instance.Restart();
+
+        // queue the revive on the next frame
+        StartCoroutine(RevivePlayer());
     }
+
+    IEnumerator RevivePlayer()
+    {
+        yield return null;
+        player.GetComponent<KillableEntity>().Revive();
+    }
+
 }

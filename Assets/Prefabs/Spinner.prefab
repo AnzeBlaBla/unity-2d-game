@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 7823062208417857435}
   - component: {fileID: 9145580787305569922}
   - component: {fileID: 6821874455430803035}
+  - component: {fileID: 6589120216969338212}
   m_Layer: 6
   m_Name: Spinner
   m_TagString: Enemy
@@ -179,6 +180,7 @@ MonoBehaviour:
   movementSpeed: 3
   damage: 1
   damageInterval: 0.5
+  initialDamageDelay: 0.25
 --- !u!114 &1326828705664242537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5008,3 +5010,19 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!58 &6589120216969338212
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8677350196250452672}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.2

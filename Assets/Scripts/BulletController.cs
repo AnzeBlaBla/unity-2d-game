@@ -44,7 +44,10 @@ public class BulletController : MonoBehaviour
         AudioManager.Instance.Play("BulletHit");
 
         ps.Play();
+    }
 
+    public void Kill()
+    {
         // hide bullet sprite
         gameObject.GetComponent<SpriteRenderer>().enabled = false;
         exists = false;
@@ -63,10 +66,19 @@ public class BulletController : MonoBehaviour
         KillableEntity ke = collision.gameObject.GetComponent<KillableEntity>();
         if (ke != null)
         {
-            if (ke.takeBulletDamage && !ke.isDead)
+            if(!ke.takeBulletDamage || ke.isDead)
+                return;
+            
+            Hit();
+            float damageDone = ke.Damage(damage);
+            Debug.Log("Bullet hit " + collision.gameObject.name + " for " + damageDone + " damage");
+            if (damageDone == damage)
             {
-                ke.Damage(damage);
-                Hit();
+                Kill();
+            }
+            else
+            {
+                damage -= damageDone;
             }
         }
     }

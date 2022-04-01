@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
 
     public float damage = 1f;
     public float damageInterval = 0.1f;
+    public float initialDamageDelay = 0.1f;
     float lastDamageTime = 0f;
     GameObject player;
     Rigidbody2D rb;
@@ -27,7 +28,7 @@ public class EnemyController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        KillableEntity ke  = GetComponent<KillableEntity>();
+        KillableEntity ke = GetComponent<KillableEntity>();
         if (ke != null)
         {
             ke.OnDeath += (KillableEntity k) =>
@@ -49,6 +50,7 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+
         if (spin)
         {
             //transform.Rotate(Vector3.forward, Time.deltaTime * spinSpeed);
@@ -83,12 +85,26 @@ public class EnemyController : MonoBehaviour
             List<KillableEntity> targets = new List<KillableEntity>(currentTargets);
             foreach (KillableEntity ke in targets)
             {
-                ke.Damage(damage);
+                // draw raycast from out position to the object we hit and get position of hit
+                Vector3 direction = ke.gameObject.transform.position - transform.position;
+                direction.Normalize();
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, Mathf.Infinity, LayerMask.GetMask("Player"));
+
+                //Debug.DrawRay(transform.position, direction * 100f, Color.blue);
+
+                if (hit.point == Vector2.zero)
+                {
+                    //Debug.Log("Did not hit anything");
+                    ke.Damage(damage);
+                    return;
+                }
+                //Debug.Log("Hit " + hit.collider.gameObject.name + " dist " + hit.distance + " at " + hit.point);
+                ke.DamageAt(hit.point, damage);
             }
             lastDamageTime = Time.time;
         }
     }
-    // start damaging
+    /* // start damaging
     void OnCollisionEnter2D(Collision2D collision)
     {
         KillableEntity ke = collision.gameObject.GetComponent<KillableEntity>();
@@ -97,11 +113,36 @@ public class EnemyController : MonoBehaviour
             if (ke.takeEnemyDamage)
             {
                 currentTargets.Add(ke);
+                lastDamageTime = Time.time + initialDamageDelay - damageInterval; // start damage after initial delay
             }
         }
     }
     // stop damaging
     void OnCollisionExit2D(Collision2D collision)
+    {
+        KillableEntity ke = collision.gameObject.GetComponent<KillableEntity>();
+        if (ke != null)
+        {
+            if (currentTargets.Contains(ke))
+            {
+                currentTargets.Remove(ke);
+            }
+        }
+    } */
+    // start damaging
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Player hit " + collision.gameObject.name);
+        KillableEntity ke = collision.gameObject.GetComponent<KillableEntity>();
+
+        if (ke != null && ke.takeEnemyDamage && !currentTargets.Contains(ke))
+        {
+            currentTargets.Add(ke);
+            lastDamageTime = Time.time + initialDamageDelay - damageInterval; // start damage after initial delay
+        }
+    }
+    // stop damaging
+    void OnTriggerExit2D(Collider2D collision)
     {
         KillableEntity ke = collision.gameObject.GetComponent<KillableEntity>();
         if (ke != null)

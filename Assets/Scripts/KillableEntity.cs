@@ -5,7 +5,7 @@ using System;
 
 public class KillableEntity : MonoBehaviour
 {
-    [HideInInspector]
+    [Tooltip("Current health of the entity")]
     public float health = 100f;
     public float maxHealth = 100f;
     public bool isDead { get; private set; }
@@ -25,23 +25,46 @@ public class KillableEntity : MonoBehaviour
     {
         Revive();
     }
-    public void Damage(float damage)
+
+    public float DamageAt(Vector3 position, float damage)
     {
-        health -= damage;
-        if (health <= 0)
-        {
-            health = 0;
-            Kill();
-        }
-        //Debug.Log("Damage: " + damage + " Health: " + health);
+        // Play damage sound and particles
         if (damageSound != null)
         {
             AudioManager.Instance.Play(damageSound.name);
         }
         if (damageParticles != null)
         {
+            //damageParticles.Play(new ParticleSystem.EmitParams() { position = position });
+
+            damageParticles.gameObject.transform.position = position;
             damageParticles.Play();
         }
+
+        return Damage(damage);
+    }
+    // returns damage dealt
+    public float Damage(float damage)
+    {
+        if (isDead)
+        {
+            return 0;
+        }
+
+        float damageDealt = 0;
+        if (health - damage <= 0)
+        {
+            damageDealt = health;
+            health = 0;
+            Kill();
+        }
+        else
+        {
+            health -= damage;
+            damageDealt = damage;
+        }
+
+        return damageDealt;
     }
 
     public void Heal(float amount)
@@ -67,6 +90,13 @@ public class KillableEntity : MonoBehaviour
             deathParticles.Play();
         }
 
+        // Clear damage particles
+        if (damageParticles != null)
+        {
+            damageParticles.Stop();
+            damageParticles.Clear();
+        }
+
         // if there are any events, fire them, otherwise destroy the object
         if (OnDeath != null)
         {
@@ -88,6 +118,13 @@ public class KillableEntity : MonoBehaviour
     {
         isDead = false;
         health = maxHealth;
+
+        // reset particles
+        /* if (damageParticles != null)
+            damageParticles.Clear();
+
+        if (deathParticles != null)
+            deathParticles.Clear(); */
     }
 
     public void SetMaxHealth(float amount)
