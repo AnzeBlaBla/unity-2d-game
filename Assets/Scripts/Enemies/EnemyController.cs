@@ -82,6 +82,7 @@ public class EnemyController : MonoBehaviour
 
         if (Time.time - lastDamageTime > damageInterval && currentTargets.Count > 0)
         {
+            Debug.Log("Damaging" + currentTargets.Count + " targets");
             List<KillableEntity> targets = new List<KillableEntity>(currentTargets);
             foreach (KillableEntity ke in targets)
             {
