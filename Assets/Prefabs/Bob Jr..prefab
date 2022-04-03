@@ -256,12 +256,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3912d53d725cb56498f937e6fa70eafe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 2
   movementType: 1
   spin: 1
   spinSpeed: 200
   movementSpeed: 0.5
   damage: 0
   damageInterval: 1
+  initialDamageDelay: 0.1
 --- !u!114 &1326828705664242537
 MonoBehaviour:
   m_ObjectHideFlags: 0

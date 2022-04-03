@@ -7,9 +7,13 @@ using System;
 
 public class AudioManager : Singleton<AudioManager>
 {
-    public Sound[] sounds;
+    static List<AudioSource> currentlyPlayingSounds = new List<AudioSource>();
+    Sound[] sounds;
     void Awake()
     {
+        // Get all sounds from the Resources/Sounds folder
+        sounds = Resources.LoadAll<Sound>("Sounds");
+        //Debug.Log("Found " + sounds.Length + " sounds");
         foreach (Sound s in sounds)
         {
             s.source = MakeAudioSource(s).GetComponent<AudioSource>();
@@ -17,7 +21,7 @@ public class AudioManager : Singleton<AudioManager>
     }
     GameObject MakeAudioSource(Sound sound, Vector3 position = default(Vector3))
     {
-        GameObject go = new GameObject("AudioSource");
+        GameObject go = new GameObject("AudioSource (" + sound.name + ")");
         go.transform.SetParent(transform);
         go.transform.position = position;
         AudioSource source = go.AddComponent<AudioSource>();
@@ -35,37 +39,46 @@ public class AudioManager : Singleton<AudioManager>
         return go;
     }
 
-    IEnumerator DestroyAfterPlay(GameObject go)
+    IEnumerator RunAfterDone(Sound sound, Action action)
+    {
+        yield return new WaitForSeconds(sound.clip.length);
+        action();
+    }
+
+    /* IEnumerator DestroyAfterPlay(GameObject go)
     {
         yield return new WaitForSeconds(go.GetComponent<AudioSource>().clip.length);
         Destroy(go);
+    } */
+
+    public AudioSource Play(Sound sound, GameObject playOn = null)
+    {
+        GameObject newGo = MakeAudioSource(sound, playOn == null ? Vector3.zero : playOn.transform.position);
+
+        AudioSource source = newGo.GetComponent<AudioSource>();
+        source.Play();
+
+        if(!sound.loop)
+            StartCoroutine(RunAfterDone(sound, () => Destroy(newGo)));
+
+        currentlyPlayingSounds.Add(source);
+
+        StartCoroutine(RunAfterDone(sound, () => currentlyPlayingSounds.Remove(source)));
+        
+        return source;
     }
-    public void Play(string name, GameObject playOn)
+
+
+    public AudioSource Play(string name, GameObject playOn = null)
     {
         Sound sound = FindSoundByName(name);
-
-        GameObject newGo = MakeAudioSource(sound, playOn.transform.position);
-        newGo.GetComponent<AudioSource>().Play();
-        if(!sound.loop)
-            StartCoroutine(DestroyAfterPlay(newGo));
-    }
-
-    public void Play(string name)
-    {
-        Sound s = FindSoundByName(name);
-        s.source.Play();
-        //Debug.Log("Playing " + name);
-        // if it's already playing, reset it (if reset is true)
-        /* if (reset)
+        if (sound == null)
         {
-            s.source.Stop();
-            s.source.Play();
+            return null;
         }
-        else if (!s.source.isPlaying)
-        {
-            s.source.Play();
-        } */
+        return Play(sound, playOn);
     }
+    
     private Sound FindSoundByName(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
@@ -76,37 +89,16 @@ public class AudioManager : Singleton<AudioManager>
         }
         return s;
     }
-    public void Stop(string name)
-    {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null)
-        {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
-        }
-        s.source.Stop();
-    }
 
-    public void Pause(string name)
+    public void StopAllSounds(bool remove = false)
     {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null)
+        foreach (AudioSource source in currentlyPlayingSounds)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
+            source.Stop();
         }
-        s.source.Pause();
-    }
-
-    public void Resume(string name)
-    {
-        Sound s = Array.Find(sounds, sound => sound.name == name);
-        if (s == null)
+        if (remove)
         {
-            Debug.LogWarning("Sound: " + name + " not found!");
-            return;
+            currentlyPlayingSounds.Clear();
         }
-        s.source.UnPause();
     }
-
 }

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Chonker
   m_EditorClassIdentifier: 
   prefab: {fileID: 5233478810910826815, guid: 8eb2688c36267bd4ca4fcd4724e4b5a0, type: 3}
+  spawnSound: {fileID: 11400000, guid: 81afe20f51b21cb4fb5f0b5b6085a985, type: 2}

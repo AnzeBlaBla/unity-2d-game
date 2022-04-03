@@ -137,4 +137,13 @@ public class KillableEntity : MonoBehaviour
         health = amount;
     }
 
+    void OnDestroy()
+    {
+        // call death event
+        if (OnDeath != null)
+        {
+            OnDeath(this);
+        }
+    }
+
 }

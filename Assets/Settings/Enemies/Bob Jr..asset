@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Bob Jr.
   m_EditorClassIdentifier: 
   prefab: {fileID: 8677350196250452672, guid: 86dcb48be395af04f9c6ef39c9a4e241, type: 3}
+  spawnSound: {fileID: 11400000, guid: 81afe20f51b21cb4fb5f0b5b6085a985, type: 2}

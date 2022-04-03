@@ -708,6 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06f76ca1b06542d44bea89e28d58df7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  overlay: {fileID: 5437000836258606007}
   timeTextObject: {fileID: 5437000835662128969}
 --- !u!1 &5437000836258606007
 GameObject:
@@ -720,14 +721,13 @@ GameObject:
   - component: {fileID: 5437000836258606003}
   - component: {fileID: 5437000836258606004}
   - component: {fileID: 5437000836258606005}
-  - component: {fileID: 5437000836258606006}
   m_Layer: 5
   m_Name: Overlay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5437000836258606003
 RectTransform:
   m_ObjectHideFlags: 0
@@ -788,19 +788,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5437000836258606006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5437000836258606007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06f76ca1b06542d44bea89e28d58df7b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeTextObject: {fileID: 5437000835662128969}
 --- !u!1 &5437000836705437936
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,7 +1118,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5437000836258606006}
+      - m_Target: {fileID: 5437000836019885013}
         m_TargetAssemblyTypeName: DeathScreen, Assembly-CSharp
         m_MethodName: Restart
         m_Mode: 1

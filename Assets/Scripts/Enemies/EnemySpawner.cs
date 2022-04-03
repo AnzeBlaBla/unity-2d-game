@@ -32,18 +32,15 @@ public class EnemySpawner : Singleton<EnemySpawner>
 
 
     [Header("Wave Spawning")]
+        public float enemySpawnDelay = 0.25f;
     public List<EnemySpawnDataPoint> waveSpawnDataPoints = new List<EnemySpawnDataPoint>();
-    void Start()
-    {
-        Restart();
-    }
 
     public void Restart()
     {
         StopAllCoroutines();
         if (spawningType == SpawningType.Random)
         {
-            StartCoroutine(SpawnEnemies());
+            StartCoroutine(SpawnEnemiesRandom());
         }
         else if (spawningType == SpawningType.Wave)
         {
@@ -51,7 +48,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
         }
     }
 
-    IEnumerator SpawnEnemies()
+    IEnumerator SpawnEnemiesRandom()
     {
         while (true)
         {
@@ -64,13 +61,30 @@ public class EnemySpawner : Singleton<EnemySpawner>
     {
         foreach (EnemySpawnDataPoint espd in waveSpawnDataPoints)
         {
-            SpawnEnemies(espd.enemiesToSpawn);
+            yield return StartCoroutine(SpawnEnemies(espd.enemiesToSpawn));
             yield return new WaitForSeconds(espd.time);
         }
 
         // Start spawning random enemies
-        StartCoroutine(SpawnEnemies());
+        StartCoroutine(SpawnEnemiesRandom());
     }
+
+    IEnumerator SpawnEnemies(List<EnemyData> enemiesToSpawn)
+    {
+        foreach (EnemyData enemyData in enemiesToSpawn)
+        {
+            SpawnEnemy(enemyData.prefab);
+
+            // play spawn sound
+            if (enemyData.spawnSound != null)
+            {
+                AudioManager.Instance.Play(enemyData.spawnSound);
+            }
+            // wait between spawning each enemy
+            yield return new WaitForSeconds(enemySpawnDelay);
+        }
+    }
+
     void SpawnEnemy(GameObject prefab)
     {
         Vector2 spawnPosition = new Vector2(spawnAround.transform.position.x, spawnAround.transform.position.y);
@@ -78,19 +92,14 @@ public class EnemySpawner : Singleton<EnemySpawner>
         Vector3 spawnPosition3D = new Vector3(spawnPosition.x, spawnPosition.y, ZPositions.enemy);
 
         GameObject enemy = Instantiate(prefab, spawnPosition3D, Quaternion.identity);
+
+        // Unused, sound was moved to enemy prefabs instead of a central script
+        //EnemySoundManager.AddEnemy(enemy);
     }
 
     void SpawnRandomEnemy()
     {
         SpawnEnemy(randomSpawnEnemies[Random.Range(0, randomSpawnEnemies.Count)].prefab);
-    }
-
-    void SpawnEnemies(List<EnemyData> enemiesToSpawn)
-    {
-        foreach (EnemyData enemyData in enemiesToSpawn)
-        {
-            SpawnEnemy(enemyData.prefab);
-        }
     }
 
 

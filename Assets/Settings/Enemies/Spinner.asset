@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: Spinner
   m_EditorClassIdentifier: 
   prefab: {fileID: 8677350196250452672, guid: 6b5afb1d00cc33f4bb433f2fcf11c644, type: 3}
+  spawnSound: {fileID: 11400000, guid: 6db84a9df4cb19a45bac85393739f203, type: 2}

@@ -5,6 +5,7 @@ using TMPro;
 
 public class DeathScreen : MonoBehaviour
 {
+    public GameObject overlay;
     public GameObject timeTextObject;
 
     KillableEntity playerKe;
@@ -19,14 +20,24 @@ public class DeathScreen : MonoBehaviour
 
         playerKe.OnDeath += OnDeath;
 
-        gameObject.SetActive(false);
+        overlay.SetActive(false);
     }
 
     void OnDeath(KillableEntity ke)
     {
         Time.timeScale = 0f;
 
-        gameObject.SetActive(true);
+        AudioManager.Instance.StopAllSounds(true);
+
+        // stop sounds on all enemies
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<AudioSource>().Stop();
+        }
+
+
+        overlay.SetActive(true);
         float aliveTime = TimeDisplay.Instance.timeAlive;
         timeText.text = string.Format(formatText, aliveTime);
     }
@@ -34,7 +45,7 @@ public class DeathScreen : MonoBehaviour
     public void Restart()
     {
         Time.timeScale = 1f;
-        gameObject.SetActive(false);
+        overlay.SetActive(false);
         GameManager.Instance.Restart();
     }
 }
