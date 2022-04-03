@@ -25,9 +25,18 @@ public class DeathScreen : MonoBehaviour
 
     void OnDeath(KillableEntity ke)
     {
+        StartCoroutine(ShowDeathScreen());
+    }
+
+    IEnumerator ShowDeathScreen()
+    {
+        // wait for a frame so other scripts can finish
+        yield return null;
         Time.timeScale = 0f;
 
         AudioManager.Instance.StopAllSounds(true);
+
+        AudioManager.Instance.Play("PlayerDeath");
 
         // stop sounds on all enemies
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -44,6 +53,8 @@ public class DeathScreen : MonoBehaviour
 
     public void Restart()
     {
+        AudioManager.Instance.Play("UIClick");
+        
         Time.timeScale = 1f;
         overlay.SetActive(false);
         GameManager.Instance.Restart();

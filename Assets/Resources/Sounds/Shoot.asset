@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 773d9419c99d9904cb0f8f4bedd38be0, type: 3}
   m_Name: Shoot
   m_EditorClassIdentifier: 
-  clip: {fileID: 8300000, guid: e09d68ad5b1ef5a4184ad7e3f57ee1e1, type: 3}
+  clip: {fileID: 8300000, guid: 2ac23821be54c40438b93e4543c67ad2, type: 3}
   group: {fileID: 11400000, guid: df941a9621abc964fa97ff0f70b54a70, type: 2}
-  volume: 1
+  volume: 0.5
   pitch: 1
   loop: 0
   mute: 0

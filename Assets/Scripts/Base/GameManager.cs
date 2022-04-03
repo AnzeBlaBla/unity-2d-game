@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
     public GameObject spawnPosition;
-    public GameObject player;
+    GameObject player;
 
     void Start()
     {

@@ -14,12 +14,16 @@ public class PlayerMovement : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float rotateSpeed = 10f;
+    public Sound moveSound;
+    AudioSource moveAudioSource;
     Vector3 desiredPosition;
 
     // Shooting
     [Header("Constraints")]
     public bool disableMoveWhenShooting = false;
     public bool disableMoveWhenChargingUp = false;
+    public GameObject boundsObject;
+    Bounds moveBounds;
 
     InputActions inputActions;
     GameObject positionPointer;
@@ -34,11 +38,29 @@ public class PlayerMovement : MonoBehaviour
         playerShooting = GetComponent<PlayerShooting>();
 
         positionPointer = Instantiate(positionPointerPrefab);
+
+        GetComponent<KillableEntity>().OnDeath += OnDeath;
+        GetComponent<KillableEntity>().OnRevive += OnRevive;
+    }
+
+    void OnDeath(KillableEntity ke)
+    {
+        // stop this script
+        enabled = false;
+    }
+
+    void OnRevive(KillableEntity ke)
+    {
+        // Start this script
+        enabled = true;
     }
 
     void Start()
     {
+        moveBounds = boundsObject.GetComponent<SpriteRenderer>().bounds;
+
         inputActions = InputController.Instance.inputActions;
+
         inputActions.Player.Move.performed += ctx => Move();
 
         Reset();
@@ -52,15 +74,31 @@ public class PlayerMovement : MonoBehaviour
     }
     void Move()
     {
-        desiredPosition = MousePositionToWorldPoint();
+        if(!enabled)
+            return;
+        
+        Vector3 clickedPosition = MousePositionToWorldPoint();
+
+        if (!moveBounds.Contains(clickedPosition))
+            return;
+
+        desiredPosition = clickedPosition;
+
         positionPointer.transform.position = new Vector3(desiredPosition.x, desiredPosition.y, ZPositions.positionPointer);
         positionPointer.SetActive(true);
         reachedDesiredPosition = false;
+
+        // play move sound
+        if (moveSound != null && moveAudioSource == null)
+        {
+            moveAudioSource = AudioManager.Instance.Play(moveSound);
+        }
+        AudioManager.Instance.Play("UIClick");
     }
     void doMove()
     {
         rb.angularVelocity = 0; // stop rotating
-        
+
         if (playerShooting.shooting && disableMoveWhenShooting)
         {
             return;
@@ -82,6 +120,13 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = Vector2.zero;
             reachedDesiredPosition = true;
             positionPointer.SetActive(false);
+
+            // stop move sound
+            if (moveAudioSource != null)
+            {
+                AudioManager.Instance.Stop(moveAudioSource);
+                moveAudioSource = null;
+            }
         }
         else
         {
@@ -115,7 +160,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 MousePositionToWorldPoint()
     {
         Vector2 mousePos = inputActions.Player.MousePosition.ReadValue<Vector2>();
+        Debug.Log("Mouse position: " + mousePos);
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
-        return new Vector3(worldPos.x, worldPos.y, 0);
+        return new Vector3(worldPos.x, worldPos.y, ZPositions.player);
     }
 }

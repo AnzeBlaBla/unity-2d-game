@@ -20,6 +20,7 @@ public class KillableEntity : MonoBehaviour
     public ParticleSystem deathParticles;
 
     public event Action<KillableEntity> OnDeath;
+    public event Action<KillableEntity> OnRevive;
 
     void Awake()
     {
@@ -119,6 +120,11 @@ public class KillableEntity : MonoBehaviour
         isDead = false;
         health = maxHealth;
 
+        if (OnRevive != null)
+        {
+            OnRevive(this);
+        }
+
         // reset particles
         /* if (damageParticles != null)
             damageParticles.Clear();
@@ -137,13 +143,13 @@ public class KillableEntity : MonoBehaviour
         health = amount;
     }
 
-    void OnDestroy()
+    /* void OnDestroy()
     {
         // call death event
-        if (OnDeath != null)
+        if (!isDead && OnDeath != null)
         {
             OnDeath(this);
         }
-    }
+    } */
 
 }

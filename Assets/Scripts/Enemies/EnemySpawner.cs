@@ -24,6 +24,10 @@ public class EnemySpawner : Singleton<EnemySpawner>
     public float spawnRangeFrom = 5f;
     public float spawnRangeTo = 15f;
     public SpawningType spawningType = SpawningType.Random;
+    // 2D spawning bounds
+    public GameObject boundsObject;
+    public int maxSpawnAttempts = 50;
+    Bounds spawnBounds;
 
 
     [Header("Random Spawning")]
@@ -32,8 +36,13 @@ public class EnemySpawner : Singleton<EnemySpawner>
 
 
     [Header("Wave Spawning")]
-        public float enemySpawnDelay = 0.25f;
+    public float enemySpawnDelay = 0.25f;
     public List<EnemySpawnDataPoint> waveSpawnDataPoints = new List<EnemySpawnDataPoint>();
+
+    void Start()
+    {
+        spawnBounds = boundsObject.GetComponent<SpriteRenderer>().bounds;
+    }
 
     public void Restart()
     {
@@ -84,14 +93,32 @@ public class EnemySpawner : Singleton<EnemySpawner>
             yield return new WaitForSeconds(enemySpawnDelay);
         }
     }
+    Vector3 GetRandomSpawnPosition()
+    {
+        // Get position that is within the bounds and in the specified range around the spawnAround object
+        Vector3 spawnPosition3D;
+        int attempts = 0;
+        do
+        {
+            Vector2 spawnPosition = new Vector2(spawnAround.transform.position.x, spawnAround.transform.position.y);
+            spawnPosition += Random.insideUnitCircle.normalized * Random.Range(spawnRangeFrom, spawnRangeTo);
+            spawnPosition3D = new Vector3(spawnPosition.x, spawnPosition.y, ZPositions.enemy);
+            attempts++;
+            //Debug.Log("Trying position: " + spawnPosition3D + " Attempts: " + attempts + " Is inside bounds: " + spawnBounds.Contains(spawnPosition3D));
+        } while (!spawnBounds.Contains(spawnPosition3D) && attempts < maxSpawnAttempts);
+
+        return spawnPosition3D;
+    }
 
     void SpawnEnemy(GameObject prefab)
     {
-        Vector2 spawnPosition = new Vector2(spawnAround.transform.position.x, spawnAround.transform.position.y);
+        /* Vector2 spawnPosition = new Vector2(spawnAround.transform.position.x, spawnAround.transform.position.y);
         spawnPosition += Random.insideUnitCircle.normalized * Random.Range(spawnRangeFrom, spawnRangeTo);
         Vector3 spawnPosition3D = new Vector3(spawnPosition.x, spawnPosition.y, ZPositions.enemy);
 
-        GameObject enemy = Instantiate(prefab, spawnPosition3D, Quaternion.identity);
+        GameObject enemy = Instantiate(prefab, spawnPosition3D, Quaternion.identity); */
+
+        Instantiate(prefab, GetRandomSpawnPosition(), Quaternion.identity);
 
         // Unused, sound was moved to enemy prefabs instead of a central script
         //EnemySoundManager.AddEnemy(enemy);

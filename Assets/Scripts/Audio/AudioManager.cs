@@ -13,11 +13,6 @@ public class AudioManager : Singleton<AudioManager>
     {
         // Get all sounds from the Resources/Sounds folder
         sounds = Resources.LoadAll<Sound>("Sounds");
-        //Debug.Log("Found " + sounds.Length + " sounds");
-        foreach (Sound s in sounds)
-        {
-            s.source = MakeAudioSource(s).GetComponent<AudioSource>();
-        }
     }
     GameObject MakeAudioSource(Sound sound, Vector3 position = default(Vector3))
     {
@@ -41,7 +36,7 @@ public class AudioManager : Singleton<AudioManager>
 
     IEnumerator RunAfterDone(Sound sound, Action action)
     {
-        yield return new WaitForSeconds(sound.clip.length);
+        yield return new WaitForSeconds(sound.clip.length + 0.1f);
         action();
     }
 
@@ -58,13 +53,18 @@ public class AudioManager : Singleton<AudioManager>
         AudioSource source = newGo.GetComponent<AudioSource>();
         source.Play();
 
-        if(!sound.loop)
-            StartCoroutine(RunAfterDone(sound, () => Destroy(newGo)));
+        if (!sound.loop)
+        {
+            // destroy go and remove from list after clip is done playing
+            StartCoroutine(RunAfterDone(sound, () =>
+            {
+                Destroy(newGo);
+                currentlyPlayingSounds.Remove(source);
+            }));
+        }
 
         currentlyPlayingSounds.Add(source);
 
-        StartCoroutine(RunAfterDone(sound, () => currentlyPlayingSounds.Remove(source)));
-        
         return source;
     }
 
@@ -78,7 +78,7 @@ public class AudioManager : Singleton<AudioManager>
         }
         return Play(sound, playOn);
     }
-    
+
     private Sound FindSoundByName(string name)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
@@ -89,11 +89,19 @@ public class AudioManager : Singleton<AudioManager>
         }
         return s;
     }
+    public void Stop(AudioSource source)
+    {
+        source.Stop();
+        Destroy(source.gameObject);
+        currentlyPlayingSounds.Remove(source);
+    }
 
     public void StopAllSounds(bool remove = false)
     {
+        Debug.Log("Currently playing sounds: " + currentlyPlayingSounds.Count);
         foreach (AudioSource source in currentlyPlayingSounds)
         {
+            Debug.Log("Stopping sound: " + source.clip.name);
             source.Stop();
         }
         if (remove)

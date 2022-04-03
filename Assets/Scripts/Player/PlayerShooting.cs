@@ -25,6 +25,8 @@ public class PlayerShooting : MonoBehaviour
     float shootingStartTime;
     float lastShotTime;
 
+    public ParticleSystem shootParticles;
+
     [Header("Constraints")]
     public bool stopShootingOnChargeUp = true;
 
@@ -178,6 +180,11 @@ public class PlayerShooting : MonoBehaviour
     void SpawnBullet(Vector2 direction, float speed = 10f, float damage = 1f)
     {
         BulletController.SpawnBullet(bulletPrefab, bulletSpawnPosition.position, direction + Random.insideUnitCircle * bulletDirectionRandomness, speed, damage);
+
+        if (shootParticles != null)
+        {
+            shootParticles.Play();
+        }
     }
 
     void Update()
