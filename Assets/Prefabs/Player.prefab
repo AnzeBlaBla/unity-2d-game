@@ -9696,6 +9696,7 @@ GameObject:
   - component: {fileID: 2617010651527624176}
   - component: {fileID: 4544613}
   - component: {fileID: 7045688772498890039}
+  - component: {fileID: 4019317865959202299}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -9779,6 +9780,7 @@ MonoBehaviour:
   moveSound: {fileID: 11400000, guid: 523904f82851d6b4d993e04bc00f79df, type: 2}
   disableMoveWhenShooting: 0
   disableMoveWhenChargingUp: 0
+  boundsObject: {fileID: 0}
 --- !u!114 &7296987558305845900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9920,6 +9922,20 @@ PolygonCollider2D:
       - {x: 0.07010098, y: 0.050903115}
       - {x: 0.068966515, y: 0.098611556}
       - {x: 0.019488985, y: 0.14889538}
+--- !u!114 &4019317865959202299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7505703333149132063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 863915fdbf1b67a4682a21ef66691482, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  positionPointerPrefab: {fileID: 0}
+  rotateSpeed: 10
 --- !u!1 &7505703333814324497
 GameObject:
   m_ObjectHideFlags: 0

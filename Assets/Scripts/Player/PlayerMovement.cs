@@ -30,12 +30,14 @@ public class PlayerMovement : MonoBehaviour
     bool reachedDesiredPosition = true;
     Rigidbody2D rb;
     PlayerShooting playerShooting;
+    PlayerLook playerLook;
 
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerShooting = GetComponent<PlayerShooting>();
+        playerLook = GetComponent<PlayerLook>();
 
         positionPointer = Instantiate(positionPointerPrefab);
 
@@ -61,7 +63,14 @@ public class PlayerMovement : MonoBehaviour
 
         inputActions = InputController.Instance.inputActions;
 
+
+#if UNITY_STANDALONE
         inputActions.Player.Move.performed += ctx => Move();
+#endif
+
+#if UNITY_ANDROID || UNITY_IOS
+        inputActions.Touch.PrimaryTouch.performed += ctx => Move();
+#endif
 
         Reset();
     }
@@ -74,10 +83,10 @@ public class PlayerMovement : MonoBehaviour
     }
     void Move()
     {
-        if(!enabled)
+        if (!enabled)
             return;
-        
-        Vector3 clickedPosition = MousePositionToWorldPoint();
+
+        Vector3 clickedPosition = playerLook.GetPointerPosition();
 
         if (!moveBounds.Contains(clickedPosition))
             return;
@@ -138,18 +147,6 @@ public class PlayerMovement : MonoBehaviour
 
 
         }
-    }
-    void doRotate()
-    {
-        // Rotate towards mouse
-        Vector2 direction = MousePositionToWorldPoint() - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Quaternion desiredRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * rotateSpeed);
-    }
-    void Update()
-    {
-        doRotate();
     }
 
     void FixedUpdate()
