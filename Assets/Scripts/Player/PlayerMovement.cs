@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 
@@ -31,7 +32,6 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     PlayerShooting playerShooting;
     PlayerLook playerLook;
-
 
     void Awake()
     {
@@ -85,6 +85,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!enabled)
             return;
+
+#if UNITY_ANDROID || UNITY_IOS
+        // if not clicking ui
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+#endif
 
         Vector3 clickedPosition = playerLook.GetPointerPosition();
 

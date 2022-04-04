@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 
 
@@ -39,8 +40,13 @@ public class PlayerLook : MonoBehaviour
     }
     void doRotate()
     {
+        Vector3 lookAtPos = GetPointerPosition();
+        if(lookAtPos == Vector3.zero)
+        {
+            return;
+        }
         // Rotate towards mouse
-        Vector2 direction = GetPointerPosition() - transform.position;
+        Vector2 direction = lookAtPos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion desiredRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * rotateSpeed);
@@ -52,20 +58,31 @@ public class PlayerLook : MonoBehaviour
 
     public Vector3 GetPointerPosition()
     {
+        Vector2 lookAtPos;
         // mobile input
 #if UNITY_ANDROID || UNITY_IOS
-        Vector2 lookAtPos = inputActions.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
-        Debug.Log("Touch position: " + lookAtPos);
-        if(lookAtPos == Vector2.zero)
+        // if over UI, ignore input
+        if (EventSystem.current.IsPointerOverGameObject())
         {
             lookAtPos = lastPointerPosition;
-        } else {
-            lastPointerPosition = lookAtPos;
+        }
+        else
+        {
+            lookAtPos = inputActions.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
+            Debug.Log("Touch position: " + lookAtPos);
+            if (lookAtPos == Vector2.zero)
+            {
+                lookAtPos = lastPointerPosition;
+            }
+            else
+            {
+                lastPointerPosition = lookAtPos;
+            }
         }
 #endif
 
 #if UNITY_STANDALONE
-        Vector2 lookAtPos = inputActions.Player.MousePosition.ReadValue<Vector2>();
+        lookAtPos = inputActions.Player.MousePosition.ReadValue<Vector2>();
         Debug.Log("Mouse position: " + mousePos);
 #endif
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(lookAtPos.x, lookAtPos.y, 0));
