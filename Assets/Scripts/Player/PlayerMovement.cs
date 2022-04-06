@@ -63,14 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
         inputActions = InputController.Instance.inputActions;
 
-
-#if UNITY_STANDALONE
         inputActions.Player.Move.performed += ctx => Move();
-#endif
-
-#if UNITY_ANDROID || UNITY_IOS
-        inputActions.Touch.PrimaryTouch.performed += ctx => Move();
-#endif
 
         Reset();
     }
@@ -85,12 +78,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!enabled)
             return;
-
-#if UNITY_ANDROID || UNITY_IOS
+        Debug.Log(EventSystem.current.IsPointerOverGameObject());
         // if not clicking ui
         if (EventSystem.current.IsPointerOverGameObject())
             return;
-#endif
 
         Vector3 clickedPosition = playerLook.GetPointerPosition();
 

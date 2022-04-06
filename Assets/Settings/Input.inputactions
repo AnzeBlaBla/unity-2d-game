@@ -11,7 +11,7 @@
                     "id": "e1a61be7-469b-496e-a639-6d4cda6d84d7",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Tap",
+                    "interactions": "Tap(duration=0.5)",
                     "initialStateCheck": false
                 },
                 {
@@ -50,6 +50,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "347e19b7-ef8d-4d2c-842c-b4c6c7072fad",
+                    "path": "<Touchscreen>/Press",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
+                    "groups": "Touch",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -721,15 +732,6 @@
             "id": "6235ca41-6fc3-43cf-9f21-f4913ba4a458",
             "actions": [
                 {
-                    "name": "PrimaryTouch",
-                    "type": "Button",
-                    "id": "3b77469e-bf84-4af5-a0cc-0099303a2fb6",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "PrimaryTouchPosition",
                     "type": "Value",
                     "id": "f1040758-331a-438e-ba7a-743a2e4bab82",
@@ -740,17 +742,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "b623c64b-b957-44a7-a087-43ff312ab05b",
-                    "path": "<Touchscreen>/primaryTouch/press",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Touch",
-                    "action": "PrimaryTouch",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "291dfce3-af87-495a-bf18-012609ad43f0",
