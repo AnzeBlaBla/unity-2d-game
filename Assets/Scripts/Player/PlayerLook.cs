@@ -83,7 +83,7 @@ public class PlayerLook : MonoBehaviour
 
 #if UNITY_STANDALONE
         lookAtPos = inputActions.Player.MousePosition.ReadValue<Vector2>();
-        Debug.Log("Mouse position: " + mousePos);
+        Debug.Log("Mouse position: " + lookAtPos);
 #endif
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(lookAtPos.x, lookAtPos.y, 0));
         return new Vector3(worldPos.x, worldPos.y, ZPositions.player);
