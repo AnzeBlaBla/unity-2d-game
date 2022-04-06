@@ -70,7 +70,7 @@ public class BulletController : MonoBehaviour
                 return;
             
             Hit();
-            float damageDone = ke.Damage(damage);
+            float damageDone = ke.Damage(damage, true);
             //Debug.Log("Bullet hit " + collision.gameObject.name + " for " + damageDone + " damage");
             if (damageDone == damage)
             {

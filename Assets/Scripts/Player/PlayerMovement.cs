@@ -78,10 +78,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!enabled)
             return;
-        Debug.Log(EventSystem.current.IsPointerOverGameObject());
-        // if not clicking ui
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
 
         Vector3 clickedPosition = playerLook.GetPointerPosition();
 

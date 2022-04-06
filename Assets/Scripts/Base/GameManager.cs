@@ -6,17 +6,25 @@ using UnityEngine.UI;
 public class GameManager : Singleton<GameManager>
 {
     public GameObject spawnPosition;
+    public GameObject mainMenu;
     GameObject player;
 
     void Start()
     {
         player = GameObjectRegistry.Instance.player;
-        Restart();
     }
 
-    public void Restart()
+    public void StartGame()
     {
-        TimeDisplay.Instance.ResetTime();
+        mainMenu.SetActive(false);
+
+        PlatformUI.Instance.ShowUI();
+
+        RestartGame();
+    }
+
+    void ClearGame()
+    {
         // kill all enemies
         var enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach (var enemy in enemies)
@@ -28,7 +36,10 @@ public class GameManager : Singleton<GameManager>
         {
             Destroy(bullet);
         }
+    }
 
+    void SpawnPlayer()
+    {
         player.transform.position = spawnPosition.transform.position;
         player.transform.rotation = spawnPosition.transform.rotation;
 
@@ -37,11 +48,19 @@ public class GameManager : Singleton<GameManager>
 
         player.GetComponent<PlayerShooting>().currentChargeUp = 0f;
 
-
-
         player.GetComponent<PlayerMovement>().Reset();
+    }
 
-        EnemySpawner.Instance.Restart();
+    public void RestartGame()
+    {
+        ClearGame();
+
+        SpawnPlayer();
+
+        TimeDisplay.Instance.ResetTime();
+
+        EnemySpawner.Instance.StartSpawning();
+
 
         // queue the revive on the next frame
         StartCoroutine(RevivePlayer());
@@ -51,6 +70,29 @@ public class GameManager : Singleton<GameManager>
     {
         yield return null;
         player.GetComponent<KillableEntity>().Revive();
+    }
+
+    public void OpenSettings()
+    {
+        Debug.Log("Open Settings TODO"); // TODO
+    }
+
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void MainMenu()
+    {
+        PlatformUI.Instance.HideUI();
+        ClearGame();
+        EnemySpawner.Instance.StopSpawning();
+        SpawnPlayer();
+
+        mainMenu.SetActive(true);
+
+        StartCoroutine(RevivePlayer());
     }
 
 }

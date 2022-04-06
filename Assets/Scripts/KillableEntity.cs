@@ -20,6 +20,7 @@ public class KillableEntity : MonoBehaviour
     public ParticleSystem deathParticles;
 
     public event Action<KillableEntity> OnDeath;
+    public event Action<KillableEntity> OnDamage;
     public event Action<KillableEntity> OnRevive;
 
     void Awake()
@@ -45,7 +46,7 @@ public class KillableEntity : MonoBehaviour
         return Damage(damage);
     }
     // returns damage dealt
-    public float Damage(float damage)
+    public float Damage(float damage, bool playParticles = false)
     {
         if (isDead)
         {
@@ -63,6 +64,23 @@ public class KillableEntity : MonoBehaviour
         {
             health -= damage;
             damageDealt = damage;
+        }
+
+        if (OnDamage != null)
+        {
+            OnDamage(this);
+        }
+
+        if(playParticles)
+        {
+            if (damageSound != null)
+            {
+                AudioManager.Instance.Play(damageSound.name);
+            }
+            if (damageParticles != null)
+            {
+                damageParticles.Play();
+            }
         }
 
         return damageDealt;

@@ -44,7 +44,7 @@ public class EnemySpawner : Singleton<EnemySpawner>
         spawnBounds = boundsObject.GetComponent<SpriteRenderer>().bounds;
     }
 
-    public void Restart()
+    public void StartSpawning()
     {
         StopAllCoroutines();
         if (spawningType == SpawningType.Random)
@@ -55,6 +55,11 @@ public class EnemySpawner : Singleton<EnemySpawner>
         {
             StartCoroutine(SpawnEnemiesWave());
         }
+    }
+
+    public void StopSpawning()
+    {
+        StopAllCoroutines();
     }
 
     IEnumerator SpawnEnemiesRandom()

@@ -60,7 +60,7 @@ public class PlayerLook : MonoBehaviour
     {
         Vector2 lookAtPos;
         // mobile input
-#if UNITY_ANDROID || UNITY_IOS
+/* #if UNITY_ANDROID || UNITY_IOS
         // if over UI, ignore input
         if (EventSystem.current.IsPointerOverGameObject())
         {
@@ -79,11 +79,11 @@ public class PlayerLook : MonoBehaviour
                 lastPointerPosition = lookAtPos;
             }
         }
-#endif
+#endif */
 
 #if UNITY_STANDALONE
         lookAtPos = inputActions.Player.MousePosition.ReadValue<Vector2>();
-        Debug.Log("Mouse position: " + lookAtPos);
+        //Debug.Log("Mouse position: " + lookAtPos);
 #endif
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(lookAtPos.x, lookAtPos.y, 0));
         return new Vector3(worldPos.x, worldPos.y, ZPositions.player);

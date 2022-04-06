@@ -57,6 +57,15 @@ public class DeathScreen : MonoBehaviour
         
         Time.timeScale = 1f;
         overlay.SetActive(false);
-        GameManager.Instance.Restart();
+        GameManager.Instance.RestartGame();
+    }
+
+    public void MainMenu()
+    {
+        AudioManager.Instance.Play("UIClick");
+
+        Time.timeScale = 1f;
+        overlay.SetActive(false);
+        GameManager.Instance.MainMenu();
     }
 }
