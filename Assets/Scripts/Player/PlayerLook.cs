@@ -69,7 +69,7 @@ public class PlayerLook : MonoBehaviour
         else
         {
             lookAtPos = inputActions.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
-            Debug.Log("Touch position: " + lookAtPos);
+            //Debug.Log("Touch position: " + lookAtPos);
             if (lookAtPos == Vector2.zero)
             {
                 lookAtPos = lastPointerPosition;
