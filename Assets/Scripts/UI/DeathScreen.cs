@@ -5,6 +5,8 @@ using TMPro;
 
 public class DeathScreen : MonoBehaviour
 {
+    public static bool visible = false;
+
     public GameObject overlay;
     public GameObject timeTextObject;
 
@@ -32,19 +34,16 @@ public class DeathScreen : MonoBehaviour
     {
         // wait for a frame so other scripts can finish
         yield return null;
+
+        visible = true;
+
         Time.timeScale = 0f;
 
         AudioManager.Instance.StopAllSounds(true);
 
         AudioManager.Instance.Play("PlayerDeath");
 
-        // stop sounds on all enemies
-        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (var enemy in enemies)
-        {
-            enemy.GetComponent<AudioSource>().Stop();
-        }
-
+        EnemyController.StopAllSounds();
 
         overlay.SetActive(true);
         float aliveTime = TimeDisplay.Instance.timeAlive;
@@ -57,6 +56,7 @@ public class DeathScreen : MonoBehaviour
         
         Time.timeScale = 1f;
         overlay.SetActive(false);
+        visible = false;
         GameManager.Instance.RestartGame();
     }
 
@@ -66,6 +66,7 @@ public class DeathScreen : MonoBehaviour
 
         Time.timeScale = 1f;
         overlay.SetActive(false);
+        visible = false;
         GameManager.Instance.MainMenu();
     }
 }

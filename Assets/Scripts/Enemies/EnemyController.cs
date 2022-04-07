@@ -155,4 +155,38 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
+
+
+    // Static stuff
+
+    public static void StopAllSounds()
+    {
+        // stop sounds on all enemies
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<AudioSource>().Stop();
+        }
+    }
+
+    public static void PauseAllSounds()
+    {
+        // stop sounds on all enemies
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<AudioSource>().Pause();
+        }
+    }
+
+    public static void ResumeAllSounds()
+    {
+        // stop sounds on all enemies
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (var enemy in enemies)
+        {
+            enemy.GetComponent<AudioSource>().UnPause();
+        }
+    }
 }

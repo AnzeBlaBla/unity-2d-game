@@ -109,4 +109,20 @@ public class AudioManager : Singleton<AudioManager>
             currentlyPlayingSounds.Clear();
         }
     }
+
+    public void PauseAllSounds()
+    {
+        foreach (AudioSource source in currentlyPlayingSounds)
+        {
+            source.Pause();
+        }
+    }
+
+    public void ResumeAllSounds()
+    {
+        foreach (AudioSource source in currentlyPlayingSounds)
+        {
+            source.UnPause();
+        }
+    }
 }
