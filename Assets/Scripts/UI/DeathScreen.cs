@@ -46,7 +46,7 @@ public class DeathScreen : MonoBehaviour
         EnemyController.StopAllSounds();
 
         overlay.SetActive(true);
-        float aliveTime = TimeDisplay.Instance.timeAlive;
+        float aliveTime = HUDManager.Instance.timeAlive;
         timeText.text = string.Format(formatText, aliveTime);
     }
 

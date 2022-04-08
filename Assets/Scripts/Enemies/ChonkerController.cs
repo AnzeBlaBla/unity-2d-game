@@ -7,6 +7,8 @@ public class ChonkerController : MonoBehaviour
     public float launchInterval = 1f;
     public float launchIntervalVariance = 0.5f;
 
+    public float launchWarningTime = 0.5f;
+
     public float launchSpeed = 10f;
     public float launchTime = 0.1f;
 
@@ -30,6 +32,8 @@ public class ChonkerController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(launchInterval + Random.Range(-launchIntervalVariance, launchIntervalVariance));
+            ec.currentMovementSpeed = 0f;
+            yield return new WaitForSeconds(launchWarningTime);
             yield return Launch();
         }
     }

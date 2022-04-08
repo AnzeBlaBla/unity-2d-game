@@ -5,13 +5,13 @@ public class PlatformUI : Singleton<PlatformUI>
 {
     public GameObject UIContainer;
 
-    [Header("Platform UIs")]
-    public GameObject mobileUIPrefab;
-    public GameObject standaloneUIPrefab;
+    [Header("UI Elements")]
+    public GameObject HUDContainer;
+    public GameObject settingsContainer;
 
     void Awake()
     {
-#if UNITY_ANDROID || UNITY_IOS
+/* #if UNITY_ANDROID || UNITY_IOS
         GameObject useUI = Instantiate(mobileUIPrefab);
 #endif
 #if UNITY_STANDALONE
@@ -20,18 +20,13 @@ public class PlatformUI : Singleton<PlatformUI>
         useUI.transform.SetParent(UIContainer.transform);
         useUI.transform.localScale = Vector3.one;
         useUI.transform.localPosition = Vector3.zero;
-
-        HideUI();
+ */
+        HideAll();
     }
 
-    public void ShowUI()
+    public void HideAll()
     {
-        UIContainer.SetActive(true);
+        HUDContainer.SetActive(false);
+        settingsContainer.SetActive(false);
     }
-
-    public void HideUI()
-    {
-        UIContainer.SetActive(false);
-    }
-
 }

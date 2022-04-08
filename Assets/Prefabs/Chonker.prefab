@@ -271,8 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc534a164b4e31d42ab22456e423d749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 50
-  maxHealth: 50
+  health: 40
+  maxHealth: 40
   takeBulletDamage: 1
   takeEnemyDamage: 0
   deathSound: {fileID: 11400000, guid: 169e2237da8112c45a1343a4b820a621, type: 2}
@@ -5250,5 +5250,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   launchInterval: 5
   launchIntervalVariance: 1
+  launchWarningTime: 0.5
   launchSpeed: 15
   launchTime: 0.25

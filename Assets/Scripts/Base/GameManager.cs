@@ -18,7 +18,7 @@ public class GameManager : Singleton<GameManager>
     {
         mainMenu.SetActive(false);
 
-        PlatformUI.Instance.ShowUI();
+        PlatformUI.Instance.HUDContainer.SetActive(true);
 
         RestartGame();
     }
@@ -57,7 +57,7 @@ public class GameManager : Singleton<GameManager>
 
         SpawnPlayer();
 
-        TimeDisplay.Instance.ResetTime();
+        HUDManager.Instance.ResetTime();
 
         EnemySpawner.Instance.StartSpawning();
 
@@ -74,7 +74,7 @@ public class GameManager : Singleton<GameManager>
 
     public void OpenSettings()
     {
-        Debug.Log("Open Settings TODO"); // TODO
+        PlatformUI.Instance.settingsContainer.SetActive(true);
     }
 
 
@@ -85,7 +85,7 @@ public class GameManager : Singleton<GameManager>
 
     public void MainMenu()
     {
-        PlatformUI.Instance.HideUI();
+        PlatformUI.Instance.HUDContainer.SetActive(false);
         ClearGame();
         EnemySpawner.Instance.StopSpawning();
         SpawnPlayer();
