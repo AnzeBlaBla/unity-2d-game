@@ -41,7 +41,6 @@ public class HUDManager : Singleton<HUDManager>
         timeFormatText = timeText.text;
 
         playerKe = GameObjectRegistry.Instance.player.GetComponent<KillableEntity>();
-        HPText = GetComponent<TextMeshProUGUI>();
     }
     void Update()
     {

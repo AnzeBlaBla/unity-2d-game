@@ -9,9 +9,18 @@ public class GameManager : Singleton<GameManager>
     public GameObject mainMenu;
     GameObject player;
 
+    public bool playing = false;
+
     void Start()
     {
         player = GameObjectRegistry.Instance.player;
+
+        player.GetComponent<KillableEntity>().OnDeath += OnDeath;
+    }
+
+    void OnDeath(KillableEntity ke)
+    {
+        playing = false;
     }
 
     public void StartGame()
@@ -53,6 +62,8 @@ public class GameManager : Singleton<GameManager>
 
     public void RestartGame()
     {
+        playing = true;
+
         ClearGame();
 
         SpawnPlayer();
@@ -85,6 +96,8 @@ public class GameManager : Singleton<GameManager>
 
     public void MainMenu()
     {
+        playing = false;
+        
         PlatformUI.Instance.HUDContainer.SetActive(false);
         ClearGame();
         EnemySpawner.Instance.StopSpawning();

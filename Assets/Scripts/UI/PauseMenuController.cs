@@ -19,7 +19,7 @@ public class PauseMenuController : MonoBehaviour
 
     void Pause()
     {
-        if(!DeathScreen.visible && isActiveAndEnabled)
+        if(!DeathScreen.visible && isActiveAndEnabled && GameManager.Instance.playing)
             TogglePauseMenu();
     }
 

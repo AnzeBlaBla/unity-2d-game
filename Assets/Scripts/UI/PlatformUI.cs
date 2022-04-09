@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class PlatformUI : Singleton<PlatformUI>
 {
-    public GameObject UIContainer;
+    //public GameObject UIContainer;
 
     [Header("UI Elements")]
     public GameObject HUDContainer;
