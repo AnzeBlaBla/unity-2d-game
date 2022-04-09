@@ -73,6 +73,10 @@ public class PlayerMovement : MonoBehaviour
         reachedDesiredPosition = true;
         if (positionPointer.activeSelf)
             positionPointer.SetActive(false);
+
+        // stop sound
+        if (moveAudioSource != null)
+            moveAudioSource.Stop();
     }
     void Move()
     {
@@ -91,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
         reachedDesiredPosition = false;
 
         // play move sound
-        if (moveSound != null && moveAudioSource == null)
+        if (moveSound != null && moveAudioSource == null || moveAudioSource.isPlaying == false)
         {
             moveAudioSource = AudioManager.Instance.Play(moveSound);
         }

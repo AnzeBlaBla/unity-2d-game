@@ -25,21 +25,17 @@ public class PauseMenuController : MonoBehaviour
 
     void ShowPauseMenu()
     {
-        AudioManager.Instance.PauseAllSounds();
-        EnemyController.PauseAllSounds();
+        GameManager.Instance.PauseGame();
 
         pauseMenu.SetActive(true);
         visible = true;
-        Time.timeScale = 0;
     }
     void HidePauseMenu()
     {
-        AudioManager.Instance.ResumeAllSounds();
-        EnemyController.ResumeAllSounds();
+        GameManager.Instance.ResumeGame();
 
         pauseMenu.SetActive(false);
         visible = false;
-        Time.timeScale = 1;
     }
 
     void TogglePauseMenu()

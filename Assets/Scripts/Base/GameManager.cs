@@ -85,6 +85,9 @@ public class GameManager : Singleton<GameManager>
 
     public void OpenSettings()
     {
+        GameObjectRegistry.Instance.player.GetComponent<PlayerMovement>().enabled = false;
+        //GameObjectRegistry.Instance.player.GetComponent<PlayerLook>().enabled = false;
+        GameObjectRegistry.Instance.player.GetComponent<PlayerShooting>().enabled = false;
         PlatformUI.Instance.settingsContainer.SetActive(true);
     }
 
@@ -97,7 +100,7 @@ public class GameManager : Singleton<GameManager>
     public void MainMenu()
     {
         playing = false;
-        
+
         PlatformUI.Instance.HUDContainer.SetActive(false);
         ClearGame();
         EnemySpawner.Instance.StopSpawning();
@@ -106,6 +109,28 @@ public class GameManager : Singleton<GameManager>
         mainMenu.SetActive(true);
 
         StartCoroutine(RevivePlayer());
+    }
+
+
+    public void PauseGame()
+    {
+        Debug.Log("PauseGame");
+        Time.timeScale = 0;
+
+        AudioManager.Instance.PauseAllSounds();
+        EnemyController.PauseAllSounds();
+
+        GameObjectRegistry.Instance.player.GetComponent<PlayerMovement>().enabled = false;
+    }
+
+    public void ResumeGame()
+    {
+        Time.timeScale = 1;
+
+        AudioManager.Instance.ResumeAllSounds();
+        EnemyController.ResumeAllSounds();
+
+        GameObjectRegistry.Instance.player.GetComponent<PlayerMovement>().enabled = true;
     }
 
 }

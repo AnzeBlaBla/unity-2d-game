@@ -33,7 +33,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""id"": ""e1a61be7-469b-496e-a639-6d4cda6d84d7"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": ""Tap(duration=0.5)"",
+                    ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
@@ -89,7 +89,7 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""347e19b7-ef8d-4d2c-842c-b4c6c7072fad"",
                     ""path"": ""<Touchscreen>/Press"",
-                    ""interactions"": ""Press(behavior=1)"",
+                    ""interactions"": ""Tap(duration=0.25)"",
                     ""processors"": """",
                     ""groups"": ""Touch"",
                     ""action"": ""Move"",

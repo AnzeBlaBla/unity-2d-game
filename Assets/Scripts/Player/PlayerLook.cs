@@ -41,7 +41,7 @@ public class PlayerLook : MonoBehaviour
     void doRotate()
     {
         Vector3 lookAtPos = GetPointerPosition();
-        if(lookAtPos == Vector3.zero)
+        if (lookAtPos == Vector3.zero)
         {
             return;
         }
@@ -49,7 +49,16 @@ public class PlayerLook : MonoBehaviour
         Vector2 direction = lookAtPos - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion desiredRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * rotateSpeed);
+
+        // snappy aim if not ingame
+        if (GameManager.Instance.playing)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * rotateSpeed);
+        }
+        else
+        {
+            transform.rotation = desiredRotation;
+        }
     }
     void Update()
     {
@@ -60,26 +69,20 @@ public class PlayerLook : MonoBehaviour
     {
         Vector2 lookAtPos;
         // mobile input
-/* #if UNITY_ANDROID || UNITY_IOS
+#if UNITY_ANDROID || UNITY_IOS
         // if over UI, ignore input
-        if (EventSystem.current.IsPointerOverGameObject())
+
+        lookAtPos = inputActions.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
+        //Debug.Log("Touch position: " + lookAtPos);
+        if (lookAtPos == Vector2.zero)
         {
             lookAtPos = lastPointerPosition;
         }
         else
         {
-            lookAtPos = inputActions.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
-            //Debug.Log("Touch position: " + lookAtPos);
-            if (lookAtPos == Vector2.zero)
-            {
-                lookAtPos = lastPointerPosition;
-            }
-            else
-            {
-                lastPointerPosition = lookAtPos;
-            }
+            lastPointerPosition = lookAtPos;
         }
-#endif */
+#endif
 
 #if UNITY_STANDALONE
         lookAtPos = inputActions.Player.MousePosition.ReadValue<Vector2>();
