@@ -9,6 +9,7 @@ using UnityEngine;
 public class PlayerShooting : MonoBehaviour
 {
     InputActions inputActions;
+    PlayerLook playerLook;
     public GameObject bulletPrefab;
 
 
@@ -57,6 +58,11 @@ public class PlayerShooting : MonoBehaviour
     float chargeUpStartTime;
     [HideInInspector]
     public float currentChargeUp = 0f;
+
+    void Awake()
+    {
+        playerLook = GetComponent<PlayerLook>();
+    }
 
     void Start()
     {
@@ -162,7 +168,7 @@ public class PlayerShooting : MonoBehaviour
         {
             return;
         }
-        Vector2 middleDirection = (MousePositionToWorldPoint() - transform.position).normalized;
+        Vector2 middleDirection = (playerLook.GetPointerPosition() - transform.position).normalized;
 
         // calculate angle between spawned bullets
         float angle = chargeUpSpread / (chargeUpPoint.numberOfBullets - 1);
@@ -191,13 +197,6 @@ public class PlayerShooting : MonoBehaviour
     {
         doShoot();
         doChargeUp();
-    }
-
-    Vector3 MousePositionToWorldPoint()
-    {
-        Vector2 mousePos = inputActions.Player.MousePosition.ReadValue<Vector2>();
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
-        return new Vector3(worldPos.x, worldPos.y, 0);
     }
 
 }
