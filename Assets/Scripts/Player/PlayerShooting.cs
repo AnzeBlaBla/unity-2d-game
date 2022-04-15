@@ -71,13 +71,13 @@ public class PlayerShooting : MonoBehaviour
 
     }
     #region Shooting
-    void ShootStart()
+    public void ShootStart()
     {
         //Debug.Log("ShootStart");
         shootingStartTime = Time.time;
         shootingInput = true;
     }
-    void ShootEnd()
+    public void ShootEnd()
     {
         //Debug.Log("ShootEnd");
         shootingInput = false;
@@ -110,13 +110,13 @@ public class PlayerShooting : MonoBehaviour
     #endregion
 
     #region ChargeUp
-    void ChargeUpStart()
+    public void ChargeUpStart()
     {
         //Debug.Log("ChargeUpStart");
         chargeUpStartTime = Time.time;
         chargingUp = true;
     }
-    void ChargeUpEnd()
+    public void ChargeUpEnd()
     {
         //Debug.Log("ChargeUpEnd");
         if (chargingUp)
@@ -199,4 +199,5 @@ public class PlayerShooting : MonoBehaviour
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
         return new Vector3(worldPos.x, worldPos.y, 0);
     }
+
 }

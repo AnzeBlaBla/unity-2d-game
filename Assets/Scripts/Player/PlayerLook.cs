@@ -14,12 +14,14 @@ public class PlayerLook : MonoBehaviour
     public float rotateSpeed = 10f;
 
     InputActions inputActions;
+    PlayerMovement playerMovement;
     public Vector3 lastPointerPosition;
-
     void Awake()
     {
         GetComponent<KillableEntity>().OnDeath += OnDeath;
         GetComponent<KillableEntity>().OnRevive += OnRevive;
+
+        playerMovement = GetComponent<PlayerMovement>();
     }
 
     void OnDeath(KillableEntity ke)
@@ -70,11 +72,10 @@ public class PlayerLook : MonoBehaviour
         Vector2 lookAtPos;
         // mobile input
 #if UNITY_ANDROID || UNITY_IOS
-        // if over UI, ignore input
 
         lookAtPos = inputActions.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
         //Debug.Log("Touch position: " + lookAtPos);
-        if (lookAtPos == Vector2.zero)
+        if (lookAtPos == Vector2.zero || playerMovement.pointerOverUI)
         {
             lookAtPos = lastPointerPosition;
         }

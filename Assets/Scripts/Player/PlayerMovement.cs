@@ -33,6 +33,8 @@ public class PlayerMovement : MonoBehaviour
     PlayerShooting playerShooting;
     PlayerLook playerLook;
 
+    public bool pointerOverUI = false;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -85,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 clickedPosition = playerLook.GetPointerPosition();
 
-        if (!moveBounds.Contains(clickedPosition))
+        if (!moveBounds.Contains(clickedPosition) || pointerOverUI)
             return;
 
         desiredPosition = clickedPosition;
@@ -146,6 +148,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        CheckOverUI();
+    }
+
     void FixedUpdate()
     {
         doMove();
@@ -157,5 +164,36 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Mouse position: " + mousePos);
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
         return new Vector3(worldPos.x, worldPos.y, ZPositions.player);
+    }
+
+    void CheckOverUI()
+    {
+        pointerOverUI = isPointerOverUI();
+    }
+
+    public bool isPointerOverUI()
+    {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            if (EventSystem.current.currentSelectedGameObject != null)
+            {
+                if (EventSystem.current.currentSelectedGameObject.GetComponent<CanvasRenderer>() != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
     }
 }
