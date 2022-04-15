@@ -64,6 +64,13 @@ public class PlayerLook : MonoBehaviour
     }
     void Update()
     {
+        //doRotate();
+        StartCoroutine(LateRotate()); // so that we can see if the pointer is over UI in this frame
+    }
+
+    IEnumerator LateRotate()
+    {
+        yield return null;
         doRotate();
     }
 
