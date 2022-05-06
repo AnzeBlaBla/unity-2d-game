@@ -185,6 +185,8 @@ public class PlayerShooting : MonoBehaviour
 
     void SpawnBullet(Vector2 direction, float speed = 10f, float damage = 1f)
     {
+        ScreenShake.Instance.Shake(0.1f, 0.1f, 0.5f);
+
         BulletController.SpawnBullet(bulletPrefab, bulletSpawnPosition.position, direction + Random.insideUnitCircle * bulletDirectionRandomness, speed, damage);
 
         if (shootParticles != null)

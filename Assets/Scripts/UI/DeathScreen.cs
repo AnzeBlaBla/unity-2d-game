@@ -39,6 +39,8 @@ public class DeathScreen : MonoBehaviour
 
         Time.timeScale = 0f;
 
+        ScreenShake.Instance.StopAllShakes();
+
         AudioManager.Instance.StopAllSounds(true);
 
         AudioManager.Instance.Play("PlayerDeath");
