@@ -32,7 +32,8 @@ public class ChonkerController : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(launchInterval + Random.Range(-launchIntervalVariance, launchIntervalVariance));
-            ec.currentMovementSpeed = 0f;
+            ec.currentMovementSpeed = -1f;
+            AudioManager.Instance.Play("ChonkerLaunchWarning");
             yield return new WaitForSeconds(launchWarningTime);
             yield return Launch();
         }
