@@ -1,0 +1,2 @@
+- Dodaj namesto charge-upa boost (ko ti ne dela damaga)
+- Da lahko dobis health nazaj
