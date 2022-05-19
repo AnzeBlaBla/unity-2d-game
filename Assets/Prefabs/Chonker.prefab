@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
+  deathItem: {fileID: 5334541526271695962, guid: e804e50a4069d794185a721db1ed04e0, type: 3}
   movementType: 1
   spin: 0
   spinSpeed: 500

@@ -12,7 +12,7 @@ public class PauseMenuController : MonoBehaviour
     {
         inputActions = InputController.Instance.inputActions;
 
-        inputActions.Player.Pause.performed += ctx => Pause();
+        inputActions.UI.Pause.performed += ctx => Pause();
 
         HidePauseMenu();
     }

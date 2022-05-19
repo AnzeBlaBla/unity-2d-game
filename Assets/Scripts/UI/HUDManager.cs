@@ -34,8 +34,10 @@ public class HUDManager : Singleton<HUDManager>
     void Start()
     {
         ps = GameObjectRegistry.Instance.player.GetComponent<PlayerShooting>();
-        minChargeUp = ps.chargeUpPoints[1].time;
-        maxChargeUp = ps.chargeUpPoints[ps.chargeUpPoints.Count - 1].time;
+        /* minChargeUp = ps.chargeUpPoints[1].time;
+        maxChargeUp = ps.chargeUpPoints[ps.chargeUpPoints.Count - 1].time; */
+        minChargeUp = 0f;
+        maxChargeUp = ps.maxChargeUpTime;
 
         gameStartTime = Time.time;
         timeFormatText = timeText.text;

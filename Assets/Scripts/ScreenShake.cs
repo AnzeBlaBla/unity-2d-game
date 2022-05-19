@@ -9,6 +9,7 @@ public class ScreenShake : Singleton<ScreenShake>
     CinemachineBasicMultiChannelPerlin noise;
 
     int shakeCount = 0;
+    public bool shakeEnabled = true;
 
     void Awake()
     {
@@ -29,6 +30,10 @@ public class ScreenShake : Singleton<ScreenShake>
 
     public void Shake(float shakeDuration = 0.5f, float shakeIntensity = 5f, float amplitudeIntensity = 1f)
     {
+        if (!shakeEnabled)
+        {
+            return;
+        }
         StartCoroutine(_ProcessShake(shakeDuration, shakeIntensity, amplitudeIntensity));
     }
 

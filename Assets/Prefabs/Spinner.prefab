@@ -176,6 +176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
+  deathItem: {fileID: 0}
   movementType: 1
   spin: 1
   spinSpeed: 500

@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
 {
     [Header("General")]
     public EnemyType enemyType;
+    public GameObject deathItem;
 
     public enum EnemyMovementType
     {
@@ -35,6 +36,7 @@ public class EnemyController : MonoBehaviour
     float lastDamageTime = 0f;
     GameObject player;
     Rigidbody2D rb;
+    KillableEntity thisKe;
     [HideInInspector]
     public float currentMovementSpeed;
 
@@ -45,26 +47,33 @@ public class EnemyController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
 
-        KillableEntity ke = GetComponent<KillableEntity>();
-        if (ke != null)
+        thisKe = GetComponent<KillableEntity>();
+        if (thisKe != null)
         {
-            ke.OnDeath += (KillableEntity k) =>
-            {
-                this.enabled = false;
-                GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                // disable all 2d colliders
-                foreach (Collider2D c in GetComponents<Collider2D>())
-                {
-                    c.enabled = false;
-                }
+            thisKe.OnDeath += OnDeath;
+        }
+    }
+    void OnDeath(KillableEntity k)
+    {
+        this.enabled = false;
+        GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+        // disable all 2d colliders
+        foreach (Collider2D c in GetComponents<Collider2D>())
+        {
+            c.enabled = false;
+        }
 
-                // stop playing base sound
-                AudioSource source = GetComponent<AudioSource>();
-                if (source != null)
-                {
-                    source.Stop();
-                }
-            };
+        // stop playing base sound
+        AudioSource source = GetComponent<AudioSource>();
+        if (source != null)
+        {
+            source.Stop();
+        }
+
+        // Spawn item
+        if (deathItem != null)
+        {
+            Instantiate(deathItem, transform.position, Quaternion.identity);
         }
     }
     void Start()
@@ -134,6 +143,17 @@ public class EnemyController : MonoBehaviour
     // start damaging
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision.gameObject.tag == "Player")
+        {
+            PlayerShooting ps = collision.gameObject.GetComponent<PlayerShooting>();
+            if (ps != null)
+            {
+                if(ps.isDashing)
+                {
+                    thisKe.Damage(ps.dashDamage, true);
+                }
+            }
+        }
         //Debug.Log("Player hit " + collision.gameObject.name);
         KillableEntity ke = collision.gameObject.GetComponent<KillableEntity>();
 

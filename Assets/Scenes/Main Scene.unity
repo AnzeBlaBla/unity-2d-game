@@ -608,6 +608,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 230537960}
+  shakeEnabled: 1
 --- !u!1 &436047469
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,8 +1299,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7505703333149132058, guid: abaa8ca38a553cc42a9e5182f0d4b318, type: 3}
+      propertyPath: dashStrength
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 7505703333149132063, guid: abaa8ca38a553cc42a9e5182f0d4b318, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7505703333149132063, guid: abaa8ca38a553cc42a9e5182f0d4b318, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
