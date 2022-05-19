@@ -43,7 +43,7 @@ public class PlayerShooting : MonoBehaviour
     }
     [Header("Charge Up")]
 
-    public List<ChargeUpPoint> chargeUpPoints = new List<ChargeUpPoint>()
+    /* public List<ChargeUpPoint> chargeUpPoints = new List<ChargeUpPoint>()
     {
         new ChargeUpPoint() { numberOfBullets = 0, time = 0f, bulletDamage = 0f },
         new ChargeUpPoint() { numberOfBullets = 3, time = 0.5f, bulletDamage = 1f },
@@ -52,7 +52,13 @@ public class PlayerShooting : MonoBehaviour
         new ChargeUpPoint() { numberOfBullets = 9, time = 5f, bulletDamage = 1f }
     };
     public float chargeUpSpread = 45f;
-    public float chargeUpBulletSpeed = 25f;
+    public float chargeUpBulletSpeed = 25f; */
+    public float dashTime = 0.5f;
+    public float dashStrength = 10f;
+    public float maxChargeUpTime = 5f;
+    public float dashDamageMult = 1f;
+    public float dashDamage = 0f;
+    public bool isDashing = false;
     [HideInInspector]
     public bool chargingUp = false;
     float chargeUpStartTime;
@@ -118,7 +124,7 @@ public class PlayerShooting : MonoBehaviour
     #region ChargeUp
     public void ChargeUpStart()
     {
-        //Debug.Log("ChargeUpStart");
+        Debug.Log("ChargeUpStart");
         chargeUpStartTime = Time.time;
         chargingUp = true;
     }
@@ -140,7 +146,7 @@ public class PlayerShooting : MonoBehaviour
             currentChargeUp = Time.time - chargeUpStartTime;
             //Debug.Log("ChargeUp: " + currentChargeUp);
         }
-        if (currentChargeUp >= chargeUpPoints[1].time && chargingUp && stopShootingOnChargeUp)
+        /* if (currentChargeUp >= chargeUpPoints[1].time && chargingUp && stopShootingOnChargeUp)
         {
             shootingInput = false;
         }
@@ -149,12 +155,18 @@ public class PlayerShooting : MonoBehaviour
             ShootChargeUp();
             chargingUp = false;
             currentChargeUp = 0f;
+        } */
+        if(currentChargeUp > maxChargeUpTime)
+        {
+            ShootChargeUp();
+            chargingUp = false;
+            currentChargeUp = 0f;
         }
     }
     void ShootChargeUp()
     {
-
-        // find charge up point that was last reached by the time
+        // Old code, for shooting multiple buillets (shotgun)
+        /* // find charge up point that was last reached by the time
         ChargeUpPoint chargeUpPoint = chargeUpPoints[0];
         for (int i = 0; i < chargeUpPoints.Count; i++)
         {
@@ -179,7 +191,41 @@ public class PlayerShooting : MonoBehaviour
             SpawnBullet(Quaternion.Euler(0, 0, curAngle) * middleDirection, chargeUpBulletSpeed, chargeUpPoint.bulletDamage);
         }
 
-        AudioManager.Instance.Play("ShootChargeUp");
+        AudioManager.Instance.Play("ShootChargeUp"); */
+
+
+        // New code - dash player forward for charge up amound
+        Vector2 dashDirection = (playerLook.GetPointerPosition() - transform.position).normalized;
+        StartCoroutine(DoDash());
+
+
+    }
+
+    // Dash forward
+    IEnumerator DoDash()
+    {
+        isDashing = true;
+        dashDamage = currentChargeUp * dashDamageMult;
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        playerMovement.enabled = false;
+
+        float chargeUpPercent = currentChargeUp / maxChargeUpTime;
+
+        float dashStartTime = Time.time;
+        float dashEndTime = Time.time + (dashTime * chargeUpPercent);
+        float lerpTime = 0f;
+        Vector2 dashStartPosition = transform.position;
+        Vector2 dashEndPosition = transform.position + transform.right * dashStrength * chargeUpPercent;
+
+        while (Time.time < dashEndTime)
+        {
+            lerpTime = (Time.time - dashStartTime) / dashTime;
+            transform.position = Vector2.Lerp(dashStartPosition, dashEndPosition, lerpTime);
+            yield return null;
+        }
+
+        playerMovement.enabled = true;
+        isDashing = false;
     }
     #endregion
 

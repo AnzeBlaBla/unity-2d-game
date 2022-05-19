@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 
 
@@ -31,15 +30,12 @@ public class PlayerMovement : MonoBehaviour
     bool reachedDesiredPosition = true;
     Rigidbody2D rb;
     PlayerShooting playerShooting;
-    PlayerLook playerLook;
 
-    public bool pointerOverUI = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         playerShooting = GetComponent<PlayerShooting>();
-        playerLook = GetComponent<PlayerLook>();
 
         positionPointer = Instantiate(positionPointerPrefab);
 
@@ -76,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
         if (positionPointer.activeSelf)
             positionPointer.SetActive(false);
 
-        // stop sound
         if (moveAudioSource != null)
             moveAudioSource.Stop();
     }
@@ -85,9 +80,9 @@ public class PlayerMovement : MonoBehaviour
         if (!enabled)
             return;
 
-        Vector3 clickedPosition = playerLook.GetPointerPosition();
+        Vector3 clickedPosition = MousePositionToWorldPoint();
 
-        if (!moveBounds.Contains(clickedPosition) || pointerOverUI)
+        if (!moveBounds.Contains(clickedPosition))
             return;
 
         desiredPosition = clickedPosition;
@@ -147,10 +142,17 @@ public class PlayerMovement : MonoBehaviour
 
         }
     }
-
+    void doRotate()
+    {
+        // Rotate towards mouse
+        Vector2 direction = MousePositionToWorldPoint() - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Quaternion desiredRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, desiredRotation, Time.deltaTime * rotateSpeed);
+    }
     void Update()
     {
-        CheckOverUI();
+        doRotate();
     }
 
     void FixedUpdate()
@@ -161,39 +163,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 MousePositionToWorldPoint()
     {
         Vector2 mousePos = inputActions.Player.MousePosition.ReadValue<Vector2>();
-        Debug.Log("Mouse position: " + mousePos);
+        //Debug.Log("Mouse position: " + mousePos);
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
         return new Vector3(worldPos.x, worldPos.y, ZPositions.player);
-    }
-
-    void CheckOverUI()
-    {
-        pointerOverUI = isPointerOverUI();
-    }
-
-    public bool isPointerOverUI()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            if (EventSystem.current.currentSelectedGameObject != null)
-            {
-                if (EventSystem.current.currentSelectedGameObject.GetComponent<CanvasRenderer>() != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
     }
 }
